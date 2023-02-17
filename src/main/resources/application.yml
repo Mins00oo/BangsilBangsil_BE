@@ -1,0 +1,11 @@
+server:
+  port: 8081
+
+spring:
+  profiles:
+    include: local
+
+logging:
+  level:
+    org:
+      hibernate: info
