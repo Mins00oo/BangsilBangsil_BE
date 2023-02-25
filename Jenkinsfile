@@ -28,7 +28,7 @@ pipeline {
         stage('Docker Build') {
             agent any
             steps {
-                sh 'docker build -t user-service:latest /var/jenkins_home/workspace/BE_USER_REPO'
+                sh 'docker build -t bangsil-user:latest /var/jenkins_home/workspace/bangsil_user'
             }
             post {
                 success {
@@ -43,19 +43,19 @@ pipeline {
         stage('Deploy') {
             agent any
             steps {
-                sh 'docker ps -f name=user-service -q \
+                sh 'docker ps -f name=bangsil-user -q \
                 | xargs --no-run-if-empty docker container stop'
 
-                sh 'docker container ls -a -f name=user-service -q \
+                sh 'docker container ls -a -f name=bangsil-user -q \
         | xargs -r docker container rm'
 
                 sh 'docker images -f dangling=true && \
                 docker rmi $(docker images -f dangling=true -q)'
 
-                sh 'docker run -d --name user-service \
-                -p 8000:8000 \
+                sh 'docker run -d --name bangsil-user \
+                -p 8081:8081 \
                 -v /etc/localtime:/etc/localtime:ro \
-                user-service:latest'
+                bangsil-user:latest'
             }
 
             post {
