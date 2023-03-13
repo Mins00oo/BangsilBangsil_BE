@@ -21,7 +21,11 @@ public class UserController {
     public BaseResponse<Object> createUser(@RequestPart UserDto userDto,
                                            @RequestPart(value = "profileImg", required = false) MultipartFile multipartFile) {
         try {
-            userService.createUser(userDto, multipartFile);
+            if (multipartFile != null && !multipartFile.isEmpty()) {
+                userService.createUser(userDto, multipartFile);
+            } else {
+                userService.createUser(userDto, null);
+            }
             return new BaseResponse<>("회원가입이 완료되었습니다.");
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());

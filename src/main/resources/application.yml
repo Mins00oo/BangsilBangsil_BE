@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    include: prod
+    include: local
   servlet:
     multipart:
       max-file-size: 50MB

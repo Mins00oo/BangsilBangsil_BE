@@ -24,11 +24,8 @@ public class UserServiceImpl implements UserService {
         S3UploadDto s3UploadDto;
         if (multipartFile != null) {
             try {
-                log.info(userDto.getEmail());
                 s3UploadDto = s3UploaderService.upload(multipartFile, "bangsilbangsil", "userProfile");
-                log.info(s3UploadDto.getImgUrl());
                 User user = userDto.toEntity(s3UploadDto);
-                log.info(String.valueOf(user.getId()));
                 userRepository.save(user);
             } catch (Exception e) {
                 throw new BaseException(BaseResponseStatus.BAD_REQUEST);
