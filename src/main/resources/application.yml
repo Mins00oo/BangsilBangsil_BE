@@ -4,8 +4,23 @@ server:
 spring:
   profiles:
     include: prod
-
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 500MB
 logging:
   level:
     org:
       hibernate: info
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAUX2TPRSSNLAUZYXB
+      secretKey: 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
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket : bangsilbangsil
+    stack:
+      auto: 'false'
