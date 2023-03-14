@@ -3,6 +3,7 @@ package com.bangsil.bangsil.utils.jwt;
 import com.bangsil.bangsil.common.config.Role;
 import com.bangsil.bangsil.user.domain.User;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @AllArgsConstructor
+@Slf4j
 public class UserDetailsImpl implements UserDetails {
     private static final String ROLE_PREFIX = "ROLE_";
     private final User user;

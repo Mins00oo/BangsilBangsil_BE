@@ -26,7 +26,8 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 
     @SneakyThrows(BaseException.class)
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(Authentication authentication)
+            throws AuthenticationException {
         UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
 
         String username = token.getName();
@@ -34,11 +35,10 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 
         UserDetailsImpl userDetail;
 
-        User userEmail = userRepository.findByEmail(username);
+        User user = userRepository.findByEmail(username);
         userDetail = (UserDetailsImpl) userDetailService.loadUserByUsername(username);
 
-
-        if (!bCryptPasswordEncoder.matches(password, userEmail.getPwd())) {
+        if (!bCryptPasswordEncoder.matches(password, user.getPwd())) {
             throw new BaseException(BaseResponseStatus.BAD_REQUEST);
         }
 
@@ -47,6 +47,6 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return false;
+        return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 }

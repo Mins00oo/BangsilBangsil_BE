@@ -7,23 +7,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 @Getter
 @Entity
 @NoArgsConstructor
-public class User extends BaseTimeEntity implements UserDetails {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
     private String email;
 
     private String pwd;
@@ -31,7 +27,6 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String phone;
 
     @Column(nullable = false, unique = true)
-    @Comment("사용자 닉네임")
     private String nickname;
 
     @Comment("프로필 사진 url")
@@ -64,40 +59,5 @@ public class User extends BaseTimeEntity implements UserDetails {
         }
         this.role = role;
         this.socialType = socialType;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public String getPassword() {
-        return null;
-    }
-
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
     }
 }

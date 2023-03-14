@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1")
 @Slf4j
@@ -18,7 +20,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public BaseResponse<Object> createUser(@RequestPart UserDto userDto,
+    public BaseResponse<Object> createUser(@Valid @RequestPart UserDto userDto,
                                            @RequestPart(value = "profileImg", required = false) MultipartFile multipartFile) {
         try {
             if (multipartFile != null && !multipartFile.isEmpty()) {

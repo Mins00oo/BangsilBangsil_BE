@@ -4,7 +4,9 @@ import com.bangsil.bangsil.common.BaseResponseStatus;
 import com.bangsil.bangsil.common.exception.BaseException;
 import com.bangsil.bangsil.user.dto.UserLoginDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,7 +16,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Slf4j
+@RequiredArgsConstructor
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
         super.setAuthenticationManager(authenticationManager);
     }
@@ -23,9 +28,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
-        final UsernamePasswordAuthenticationToken authRequest;
 
+        final UsernamePasswordAuthenticationToken authRequest;
         final UserLoginDto userLoginDto;
+
         try {
             // 사용자 요청 정보로 UserPasswordAuthenticationToken 발급
             userLoginDto = new ObjectMapper().readValue(request.getInputStream(), UserLoginDto.class);

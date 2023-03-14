@@ -24,7 +24,6 @@ public class JwtTokenProvider {
     private final UserDetailServiceImpl userDetailService;
     private final UserRepository userRepository;
 
-
     private static final long tokenValidTime = 604800000L;
 
     @Value("${token.secret}")
