@@ -2,6 +2,10 @@ server:
   port: 8081
 
 spring:
+  redis:
+    host: '43.201.111.5'
+    password: '1234'
+    port: 6379
   profiles:
     include: prod
   servlet:
@@ -12,6 +16,9 @@ logging:
   level:
     org:
       hibernate: info
+
+token:
+  secret: 'secretkey'
 
 cloud:
   aws:
@@ -24,3 +31,19 @@ cloud:
       bucket : bangsilbangsil
     stack:
       auto: 'false'
+
+mail:
+  smtp:
+    socketFactory:
+      class: javax.net.ssl.SSLSocketFactory
+      fallback: 'false'
+      port: '465'
+    starttls:
+      required: 'true'
+      enable: 'true'
+    port: '465'
+    auth: 'true'
+
+AdminMail:
+  password: 'tocheck118!'
+  id : 'sunjunam118@naver.com'

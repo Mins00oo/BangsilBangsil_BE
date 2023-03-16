@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -24,14 +25,15 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @SneakyThrows(BaseException.class)
     @Override
     public Authentication authenticate(Authentication authentication)
             throws AuthenticationException {
         UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
 
         String username = token.getName();
+        log.info(username);
         String password = (String) token.getCredentials();
+        log.info(password);
 
         UserDetailsImpl userDetail;
 
@@ -39,7 +41,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         userDetail = (UserDetailsImpl) userDetailService.loadUserByUsername(username);
 
         if (!bCryptPasswordEncoder.matches(password, user.getPwd())) {
-            throw new BaseException(BaseResponseStatus.BAD_REQUEST);
+            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
         }
 
         return new UsernamePasswordAuthenticationToken(userDetail.getUsername(), "", userDetail.getAuthorities());
