@@ -60,4 +60,8 @@ public class User extends BaseTimeEntity {
         this.role = role;
         this.socialType = socialType;
     }
+
+    public void changePw(String newPwd) {
+        this.pwd = new BCryptPasswordEncoder().encode(newPwd);
+    }
 }
