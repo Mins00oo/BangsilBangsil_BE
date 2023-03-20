@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
                 User user = userDto.toEntity(s3UploadDto);
                 userRepository.save(user);
             } catch (Exception e) {
-                throw new BaseException(BaseResponseStatus.BAD_REQUEST);
+                throw new BaseException(BaseResponseStatus.USER_CREATE_FAILED);
             }
         } else {
             userRepository.save(userDto.toEntity(null));
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userRepository.existsByEmail(email);
         } catch (Exception e) {
-            throw new BaseException(BaseResponseStatus.BAD_REQUEST);
+            throw new BaseException(BaseResponseStatus.BAD_EMAIL_REQUEST);
         }
     }
 
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
         User user = userProvider.retrieveUser(userId);
 
         if (!bCryptPasswordEncoder.matches(modifyPwDto.getOldPwd(), user.getPwd())) {
-            throw new BaseException(BaseResponseStatus.BAD_REQUEST);
+            throw new BaseException(BaseResponseStatus.INCORRECT_USER_PASSWORD);
         }
 
         user.changePw(modifyPwDto.getNewPwd());

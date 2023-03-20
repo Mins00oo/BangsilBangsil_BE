@@ -1,7 +1,6 @@
 package com.bangsil.bangsil.utils.jwt;
 
 import com.bangsil.bangsil.common.exception.BaseException;
-import com.bangsil.bangsil.user.application.UserProvider;
 import com.bangsil.bangsil.user.domain.User;
 import com.bangsil.bangsil.user.infrastructure.UserRepository;
 import io.jsonwebtoken.*;
@@ -25,7 +24,6 @@ public class JwtTokenProvider {
 
     private final UserDetailServiceImpl userDetailService;
     private final UserRepository userRepository;
-    private final UserProvider userProvider;
 
     private static final long tokenValidTime = 604800000L;
 
@@ -67,14 +65,14 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) throws BaseException {
-        log.info(this.getUserPk(token));
         UserDetails userDetails = userDetailService.loadUserByUsername(this.getUserEmail(token));
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public String getUserPk(String token) {
-        return String.valueOf(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("Id"));
+    public Long getUserPk(String token) {
+        return Long.valueOf(String.valueOf(Jwts.parser()
+                .setSigningKey(secretKey).parseClaimsJws(token).getBody().get("Id")));
     }
 
     public String getUserEmail(String token) {

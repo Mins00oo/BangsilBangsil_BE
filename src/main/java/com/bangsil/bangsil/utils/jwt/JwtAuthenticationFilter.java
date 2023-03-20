@@ -25,10 +25,12 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             throws IOException, ServletException {
 
         String token = jwtTokenProvider.getToken((HttpServletRequest) request);
-        log.info(token);
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
+            Long userId = jwtTokenProvider.getUserPk(token);
+            HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+            httpServletRequest.setAttribute("userId", userId);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

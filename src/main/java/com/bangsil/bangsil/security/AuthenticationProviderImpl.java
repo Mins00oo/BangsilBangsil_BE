@@ -1,13 +1,10 @@
 package com.bangsil.bangsil.security;
 
-import com.bangsil.bangsil.common.BaseResponseStatus;
-import com.bangsil.bangsil.common.exception.BaseException;
 import com.bangsil.bangsil.user.domain.User;
 import com.bangsil.bangsil.user.infrastructure.UserRepository;
 import com.bangsil.bangsil.utils.jwt.UserDetailServiceImpl;
 import com.bangsil.bangsil.utils.jwt.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,9 +28,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
 
         String username = token.getName();
-        log.info(username);
         String password = (String) token.getCredentials();
-        log.info(password);
 
         UserDetailsImpl userDetail;
 

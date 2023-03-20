@@ -2,6 +2,8 @@ package com.bangsil.bangsil.utils.email.application;
 
 import com.bangsil.bangsil.common.BaseResponseStatus;
 import com.bangsil.bangsil.common.exception.BaseException;
+import com.bangsil.bangsil.user.domain.User;
+import com.bangsil.bangsil.utils.oauth.vo.OAuthAttributes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,19 @@ public class RedisService {
         } catch (Exception e) {
             throw new BaseException(BaseResponseStatus.BAD_REQUEST);
         }
+    }
+
+    public User createTemporalOAuthUser(String email, String nickname, OAuthAttributes attributes, String socialType) {
+        ValueOperations<String, String> vop = redisTemplate.opsForValue();
+        vop.set("email", email, Duration.ofSeconds(60 * 10));
+        vop.set("nickname", nickname, Duration.ofSeconds(60 * 10));
+        vop.set("socialType", socialType, Duration.ofSeconds(60*10));
+
+        return User.builder()
+                .email(vop.get("email"))
+                .nickname(vop.get("nickname"))
+                .socialType(vop.get("socialType"))
+                .build();
     }
 
     public String getSmsCertification(String email) { // (4)
