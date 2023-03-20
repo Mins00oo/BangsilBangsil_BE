@@ -19,6 +19,6 @@ public class UserProviderImpl implements UserProvider {
     @Override
     public User retrieveUser(Long userId) throws BaseException {
         return userRepository.findById(userId).orElseThrow(
-                () -> new BaseException(BaseResponseStatus.BAD_REQUEST));
+                () -> new BaseException(BaseResponseStatus.USER_RETRIEVE_FAILED));
     }
 }

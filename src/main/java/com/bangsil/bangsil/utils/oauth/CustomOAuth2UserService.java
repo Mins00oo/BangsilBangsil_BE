@@ -2,6 +2,7 @@ package com.bangsil.bangsil.utils.oauth;
 
 import com.bangsil.bangsil.user.domain.User;
 import com.bangsil.bangsil.user.infrastructure.UserRepository;
+import com.bangsil.bangsil.utils.email.application.RedisService;
 import com.bangsil.bangsil.utils.oauth.vo.OAuthAttributes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import java.util.Collections;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final UserRepository userRepository;
+    private final RedisService redisService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -37,7 +39,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         //kakao or naver
         String socialType = registrationId;
         User user = createSocialUser(attributes, socialType);
-
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole())),
                 attributes.getAttributes(),
                 attributes.getNameAttributeKey());
@@ -46,9 +47,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     public User createSocialUser(OAuthAttributes attributes, String socialType) {
         User user;
 
-        userRepository.existsByEmail(attributes.getEmail());
-        user = userRepository.findByEmail(attributes.getEmail());
-        return user;
-
+        if (userRepository.existsByEmail(attributes.getEmail())) {
+            user = userRepository.findByEmail(attributes.getEmail());
+            return user;
+        } else
+            return redisService.createTemporalOAuthUser(attributes.getEmail(),
+                    attributes.getNickname(),
+                    attributes,
+                    socialType);
     }
 }
