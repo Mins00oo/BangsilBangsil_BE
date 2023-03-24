@@ -6,6 +6,8 @@ import com.bangsil.bangsil.user.domain.User;
 import com.bangsil.bangsil.user.dto.ModifyPwDto;
 import com.bangsil.bangsil.user.dto.UserDto;
 import com.bangsil.bangsil.user.infrastructure.UserRepository;
+import com.bangsil.bangsil.utils.email.application.EmailHandler;
+import com.bangsil.bangsil.utils.email.application.EmailServiceImpl;
 import com.bangsil.bangsil.utils.s3.S3UploaderService;
 import com.bangsil.bangsil.utils.s3.dto.S3UploadDto;
 import lombok.RequiredArgsConstructor;
@@ -23,21 +25,37 @@ public class UserServiceImpl implements UserService {
     private final S3UploaderService s3UploaderService;
     private final UserProvider userProvider;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final EmailServiceImpl emailService;
 
     @Transactional
     @Override
     public void createUser(UserDto userDto, MultipartFile multipartFile) throws BaseException {
         S3UploadDto s3UploadDto;
+        String code = emailService.createCode();
+        User user;
         if (multipartFile != null) {
             try {
                 s3UploadDto = s3UploaderService.upload(multipartFile, "bangsilbangsil", "userProfile");
-                User user = userDto.toEntity(s3UploadDto);
+                user = userDto.toEntity(s3UploadDto, code);
                 userRepository.save(user);
             } catch (Exception e) {
                 throw new BaseException(BaseResponseStatus.USER_CREATE_FAILED);
             }
+
+            try {
+                emailService.send(user.getEmail(), code);
+            } catch (Exception e) {
+                throw new BaseException(BaseResponseStatus.BAD_EMAIL_REQUEST);
+            }
+
         } else {
-            userRepository.save(userDto.toEntity(null));
+            User save = userRepository.save(userDto.toEntity(null, code));
+
+            try {
+                emailService.send(save.getEmail(), code);
+            } catch (Exception e) {
+                throw new BaseException(BaseResponseStatus.BAD_REQUEST);
+            }
         }
     }
 
@@ -62,5 +80,16 @@ public class UserServiceImpl implements UserService {
 
         user.changePw(modifyPwDto.getNewPwd());
 
+    }
+
+    @Transactional
+    @Override
+    public void confirmEmail(String email, String key) throws BaseException {
+        User user = userRepository.findByEmail(email);
+        if (!user.getEmailKey().equals(key)) {
+            throw new BaseException(BaseResponseStatus.BAD_REQUEST);
+        }
+
+        user.emailVerifiedSuccess();
     }
 }

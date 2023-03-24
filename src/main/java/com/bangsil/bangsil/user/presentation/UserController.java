@@ -87,4 +87,17 @@ public class UserController {
         }
     }
 
+    @GetMapping("/registerEmail")
+    public BaseResponse<Object> authorizeEmail(@RequestParam(value = "email", required = false) String email,
+                                               @RequestParam(value = "mail_key", required = false) String key) {
+
+        try {
+            userService.confirmEmail(email, key);
+            return new BaseResponse<>("이메일 인증이 완료되었습니다!");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+
 }

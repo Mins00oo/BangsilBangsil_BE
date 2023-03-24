@@ -20,7 +20,12 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String email;
+
+    private Boolean emailAuth;
+
+    private String emailKey;
 
     private String pwd;
 
@@ -46,9 +51,11 @@ public class User extends BaseTimeEntity {
     private String socialType;
 
     @Builder
-    public User(String email, String pwd, String phone, String nickname, S3UploadDto s3UploadDto, Role role,
-                String socialType) {
+    public User(String email, String emailKey, String pwd, String phone, String nickname, S3UploadDto s3UploadDto, Role role,
+                String socialType, Boolean emailAuth) {
         this.email = email;
+        this.emailAuth = emailAuth;
+        this.emailKey = emailKey;
         this.pwd = new BCryptPasswordEncoder().encode(pwd);
         this.phone = phone;
         this.nickname = nickname;
@@ -63,5 +70,9 @@ public class User extends BaseTimeEntity {
 
     public void changePw(String newPwd) {
         this.pwd = new BCryptPasswordEncoder().encode(newPwd);
+    }
+
+    public void emailVerifiedSuccess() {
+        this.emailAuth = true;
     }
 }

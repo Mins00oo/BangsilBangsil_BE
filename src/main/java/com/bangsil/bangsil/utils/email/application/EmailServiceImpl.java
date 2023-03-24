@@ -7,6 +7,7 @@ import com.bangsil.bangsil.user.infrastructure.UserRepository;
 import com.bangsil.bangsil.utils.email.dto.ConfirmCodeDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,14 +21,13 @@ import java.util.Random;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class EmailServiceImpl implements EmailService{
+public class EmailServiceImpl implements EmailService {
     private final JavaMailSender javaMailSender;
     private final UserRepository userRepository;
     private final RedisService redisService;
 
     private MimeMessage sendCode(String to, String ePw) throws BaseException {
         MimeMessage message = javaMailSender.createMimeMessage();
-
         try {
             message.addRecipients(Message.RecipientType.TO, to);
             message.setSubject("인증번호가 발송되었습니다.");
@@ -39,8 +39,10 @@ public class EmailServiceImpl implements EmailService{
         msgg += "<div style='margin:100px;'>";
         msgg += "<h1> 안녕하세요 방실방실입니다. </h1>";
         msgg += "<br>";
-        msgg += "<p>아래 인증번호를 확인해주신 후 입력해주세요.<p>";
-        msgg += "<br>";
+        msgg += "<p>아래 [링크]를 클릭하시면 이메일 인증이 완료됩니다.</p>";
+        msgg += "<a href='https://bangsil.co.kr/api/v1/registerEmail?email=\" + email +\n" +
+                "                        \"&mail_key=\" + emailKey +\n" +
+                "                        \"' target='_blank'>이메일 인증 확인</a>";
         msgg += "<p>감사합니다!<p>";
         msgg += "<br>";
         msgg += "<div align='center' style='border:1px solid black; font-family:verdana';>";
@@ -58,7 +60,37 @@ public class EmailServiceImpl implements EmailService{
         return message;
     }
 
-    public static String createCode() {
+    @Transactional
+    public void send(String email, String emailKey) throws BaseException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        try {
+            message.addRecipients(Message.RecipientType.TO, email);
+            message.setSubject("인증번호가 발송되었습니다.");
+        } catch (Exception e) {
+            throw new BaseException(BaseResponseStatus.USER_RETRIEVE_FAILED);
+        }
+
+        String msgg = "";
+        msgg += "<div style='margin:100px;'>";
+        msgg += "<h1> 안녕하세요 방실방실입니다. </h1>";
+        msgg += "<br>";
+        msgg += "<p>아래 [링크]를 클릭하시면 이메일 인증이 완료됩니다.</p>";
+        msgg += "<a href='http://localhost:8081/api/v1/registerEmail?email=" + email +
+                "&mail_key=" + emailKey +
+                "' target='_blank'>이메일 인증 확인</a>";
+        msgg += "<p>감사합니다!<p>";
+        msgg += "<br>";
+        msgg += "</div>";
+        try {
+            message.setText(msgg, "utf-8", "html");//내용
+            message.setFrom(new InternetAddress("sunjunam118@naver.com", "Bangsil"));
+            javaMailSender.send(message);
+        } catch (Exception e) {
+            throw new BaseException(BaseResponseStatus.BAD_EMAIL_REQUEST);
+        }
+    }
+
+    public String createCode() {
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
 
