@@ -1,11 +1,14 @@
 package com.bangsil.bangsil.security.handler;
 
 import com.bangsil.bangsil.common.BaseResponse;
+import com.bangsil.bangsil.common.BaseResponseStatus;
+import com.bangsil.bangsil.common.exception.BaseException;
 import com.bangsil.bangsil.user.domain.User;
 import com.bangsil.bangsil.user.infrastructure.UserRepository;
 import com.bangsil.bangsil.utils.jwt.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;

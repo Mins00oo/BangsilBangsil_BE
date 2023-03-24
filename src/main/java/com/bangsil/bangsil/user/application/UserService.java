@@ -11,4 +11,6 @@ public interface UserService {
     boolean checkDuplicateEmail(String email) throws BaseException;
 
     void modifyUserPw(ModifyPwDto modifyPwDto, Long userId) throws BaseException;
+
+    void confirmEmail(String email, String key) throws BaseException;
 }

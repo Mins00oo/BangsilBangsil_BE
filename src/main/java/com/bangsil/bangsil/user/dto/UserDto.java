@@ -21,9 +21,11 @@ public class UserDto {
     private String phone;
     private String profileImgUrl;
 
-    public User toEntity(S3UploadDto s3UploadDto) {
+    public User toEntity(S3UploadDto s3UploadDto, String code) {
         return User.builder()
                 .email(email)
+                .emailAuth(false)
+                .emailKey(code)
                 .pwd(pwd)
                 .nickname(nickname)
                 .role(role)
