@@ -1,13 +1,12 @@
 package com.bangsil.bangsil.room.domain;
 
+import com.bangsil.bangsil.room.dto.RoomRequestDto;
+import com.bangsil.bangsil.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -19,107 +18,162 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long user_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    private String building_name;
+    @Column(name = "building_name")
+    private String buildingName;
 
-    private String room_number;
+    @Column(name = "room_number")
+    private String roomNumber;
 
+    @Column(name = "deposit")
     private int deposit;
 
-    private int maintenance_fee;
+    @Column(name = "maintenance_fee")
+    private int maintenanceFee;
 
-    private int window_direction;
+    @Column(name = "window_direction")
+    private int windowDirection;
 
+    @Column(name = "bed")
     private Boolean bed;
 
+    @Column(name = "tv")
     private Boolean tv;
 
-    private Boolean washing_machine;
+    @Column(name = "washing_machine")
+    private Boolean washingMachine;
 
+    @Column(name = "dryer")
     private Boolean dryer;
 
+    @Column(name = "refrigerator")
     private Boolean refrigerator;
 
+    @Column(name = "microwave")
     private Boolean microwave;
 
-    private Boolean gas_range;
+    @Column(name = "gas_range")
+    private Boolean gasRange;
 
+    @Column(name = "induction")
     private Boolean induction;
 
-    private Boolean air_conditioner;
+    @Column(name = "air_conditioner")
+    private Boolean airConditioner;
 
-    private Boolean full_mirror;
+    @Column(name = "full_mirror")
+    private Boolean fullMirror;
 
-    private String add_residency;
+    @Column(name = "add_residency")
+    private String addResidency;
 
-    private String add_detail_address;
+    @Column(name = "add_detail_address")
+    private String addDetailAddress;
 
-    private String add_mining;
+    @Column(name = "add_mining")
+    private String addMining;
 
-    private String add_mold;
+    @Column(name = "add_mold")
+    private String addMold;
 
-    private String add_deafening;
+    @Column(name = "add_deafening")
+    private String addDeafening;
 
-    private Integer add_power_socket;
+    @Column(name = "add_power_socket")
+    private Integer addPowerSocket;
 
-    private Boolean add_leak;
+    @Column(name = "add_leak")
+    private Boolean addLeak;
 
-    private String add_bugs;
+    @Column(name = "add_bugs")
+    private String addBugs;
 
-    private Date add_move_date;
+    @Column(name = "add_move_date")
+    private Date addMoveDate;
 
-    private Date add_visit_date;
+    @Column(name = "add_visit_date")
+    private Date addVisitDate;
 
     @Builder
-    public Room(Long id, Long user_id, String building_name, String room_number, int deposit, int maintenance_fee, int window_direction, Boolean bed, Boolean tv, Boolean washing_machine, Boolean dryer, Boolean refrigerator, Boolean microwave, Boolean gas_range, Boolean induction, Boolean air_conditioner, Boolean full_mirror, String add_residency, String add_detail_address, String add_mining, String add_mold, String add_deafening, Integer add_power_socket, Boolean add_leak, String add_bugs, Date add_move_date, Date add_visit_date) {
+    public Room(Long id, User user, String buildingName, String roomNumber, int deposit, int maintenanceFee, int windowDirection, Boolean bed, Boolean tv, Boolean washingMachine, Boolean dryer, Boolean refrigerator, Boolean microwave, Boolean gasRange, Boolean induction, Boolean airConditioner, Boolean fullMirror, String addResidency, String addDetailAddress, String addMining, String addMold, String addDeafening, Integer addPowerSocket, Boolean addLeak, String addBugs, Date addMoveDate, Date addVisitDate) {
         this.id = id;
-        this.user_id = user_id;
-        this.building_name = building_name;
-        this.room_number = room_number;
+        this.user = user;
+        this.buildingName = buildingName;
+        this.roomNumber = roomNumber;
         this.deposit = deposit;
-        this.maintenance_fee = maintenance_fee;
-        this.window_direction = window_direction;
+        this.maintenanceFee = maintenanceFee;
+        this.windowDirection = windowDirection;
         this.bed = bed;
         this.tv = tv;
-        this.washing_machine = washing_machine;
+        this.washingMachine = washingMachine;
         this.dryer = dryer;
         this.refrigerator = refrigerator;
         this.microwave = microwave;
-        this.gas_range = gas_range;
+        this.gasRange = gasRange;
         this.induction = induction;
-        this.air_conditioner = air_conditioner;
-        this.full_mirror = full_mirror;
-        this.add_residency = add_residency;
-        this.add_detail_address = add_detail_address;
-        this.add_mining = add_mining;
-        this.add_mold = add_mold;
-        this.add_deafening = add_deafening;
-        this.add_power_socket = add_power_socket;
-        this.add_leak = add_leak;
-        this.add_bugs = add_bugs;
-        this.add_move_date = add_move_date;
-        this.add_visit_date = add_visit_date;
+        this.airConditioner = airConditioner;
+        this.fullMirror = fullMirror;
+        this.addResidency = addResidency;
+        this.addDetailAddress = addDetailAddress;
+        this.addMining = addMining;
+        this.addMold = addMold;
+        this.addDeafening = addDeafening;
+        this.addPowerSocket = addPowerSocket;
+        this.addLeak = addLeak;
+        this.addBugs = addBugs;
+        this.addMoveDate = addMoveDate;
+        this.addVisitDate = addVisitDate;
     }
 
     @Builder
-    public Room(Long id, Long user_id, String building_name, String room_number, int deposit, int maintenance_fee, int window_direction, Boolean bed, Boolean tv, Boolean washing_machine, Boolean dryer, Boolean refrigerator, Boolean microwave, Boolean gas_range, Boolean induction, Boolean air_conditioner, Boolean full_mirror) {
+    public Room(Long id, User user, String buildingName, String roomNumber, int deposit, int maintenanceFee, int windowDirection, Boolean bed, Boolean tv, Boolean washingMachine, Boolean dryer, Boolean refrigerator, Boolean microwave, Boolean gasRange, Boolean induction, Boolean airConditioner, Boolean fullMirror) {
         this.id = id;
-        this.user_id = user_id;
-        this.building_name = building_name;
-        this.room_number = room_number;
+        this.user = user;
+        this.buildingName = buildingName;
+        this.roomNumber = roomNumber;
         this.deposit = deposit;
-        this.maintenance_fee = maintenance_fee;
-        this.window_direction = window_direction;
+        this.maintenanceFee = maintenanceFee;
+        this.windowDirection = windowDirection;
         this.bed = bed;
         this.tv = tv;
-        this.washing_machine = washing_machine;
+        this.washingMachine = washingMachine;
         this.dryer = dryer;
         this.refrigerator = refrigerator;
         this.microwave = microwave;
-        this.gas_range = gas_range;
+        this.gasRange = gasRange;
         this.induction = induction;
-        this.air_conditioner = air_conditioner;
-        this.full_mirror = full_mirror;
+        this.airConditioner = airConditioner;
+        this.fullMirror = fullMirror;
+    }
+
+    public void modRoom(RoomRequestDto roomRequestDto){
+        this.buildingName = roomRequestDto.getRoomBasicDto().getBuildingName();
+        this.roomNumber = roomRequestDto.getRoomBasicDto().getRoomNumber();
+        this.deposit = roomRequestDto.getRoomBasicDto().getDeposit();
+        this.maintenanceFee = roomRequestDto.getRoomBasicDto().getMaintenanceFee();
+        this.windowDirection = roomRequestDto.getRoomBasicDto().getWindowDirection();
+        this.bed = roomRequestDto.getRoomOptionDto().getBed();
+        this.tv = roomRequestDto.getRoomOptionDto().getTv();
+        this.washingMachine = roomRequestDto.getRoomOptionDto().getWashingMachine();
+        this.dryer = roomRequestDto.getRoomOptionDto().getDryer();
+        this.refrigerator = roomRequestDto.getRoomOptionDto().getRefrigerator();
+        this.microwave = roomRequestDto.getRoomOptionDto().getMicrowave();
+        this.gasRange = roomRequestDto.getRoomOptionDto().getGasRange();
+        this.induction = roomRequestDto.getRoomOptionDto().getInduction();
+        this.airConditioner = roomRequestDto.getRoomOptionDto().getAirConditioner();
+        this.fullMirror = roomRequestDto.getRoomOptionDto().getFullMirror();
+        this.addResidency = roomRequestDto.getRoomAddOptionDto().getAddResidency();
+        this.addDetailAddress = roomRequestDto.getRoomAddOptionDto().getAddDetailAddress();
+        this.addMining = roomRequestDto.getRoomAddOptionDto().getAddMining();
+        this.addMold = roomRequestDto.getRoomAddOptionDto().getAddMold();
+        this.addDeafening = roomRequestDto.getRoomAddOptionDto().getAddDeafening();
+        this.addPowerSocket = roomRequestDto.getRoomAddOptionDto().getAddPowerSocket();
+        this.addLeak = roomRequestDto.getRoomAddOptionDto().getAddLeak();
+        this.addBugs = roomRequestDto.getRoomAddOptionDto().getAddBugs();
+        this.addMoveDate = roomRequestDto.getRoomAddOptionDto().getAddMoveDate();
+        this.addVisitDate = roomRequestDto.getRoomAddOptionDto().getAddVisitDate();
     }
 }

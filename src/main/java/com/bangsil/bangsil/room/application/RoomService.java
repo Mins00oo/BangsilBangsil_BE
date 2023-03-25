@@ -1,11 +1,16 @@
 package com.bangsil.bangsil.room.application;
 
-import com.bangsil.bangsil.room.domain.Room;
-import com.bangsil.bangsil.room.dto.RoomDto;
+import com.bangsil.bangsil.room.dto.*;
+
+import java.util.List;
 
 public interface RoomService {
 
-    void addRoom(RoomDto roomDto);
+    void addRoom(RoomRequestDto roomRequestDto);
 
-    RoomDto getRoom(Long roomId);
+    RoomResponseDto getRoom(Long roomId);
+
+    void modifyRoom(RoomRequestDto roomDto, Long roomId);
+
+    List<RoomRequestDto> getRoomList(Long userId);
 }

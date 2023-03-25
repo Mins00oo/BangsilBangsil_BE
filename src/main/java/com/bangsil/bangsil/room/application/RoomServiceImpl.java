@@ -1,14 +1,14 @@
 package com.bangsil.bangsil.room.application;
 
 import com.bangsil.bangsil.room.domain.Room;
-import com.bangsil.bangsil.room.dto.RoomDto;
+import com.bangsil.bangsil.room.dto.*;
 import com.bangsil.bangsil.room.infrastructure.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,16 +19,27 @@ public class RoomServiceImpl implements RoomService {
     private final ModelMapper modelMapper;
 
     @Override
-    public void addRoom(RoomDto roomDto) {
-        Room room = roomRepository.save(roomDto.toEntity(roomDto));
+    public void addRoom(RoomRequestDto roomRequestDto) {
+        Room room = roomRequestDto.toEntity(roomRequestDto);
+        roomRepository.save(room);
     }
 
     @Override
-    public RoomDto getRoom(Long roomId) {
+    public RoomResponseDto getRoom(Long roomId) {
         Room room = roomRepository.findById(roomId).get();
-        RoomDto roomDto = modelMapper.map(room,RoomDto.class);
-        return roomDto;
+        RoomResponseDto roomResponseDto = new RoomResponseDto(room);
+        return roomResponseDto;
     }
 
+    @Override
+    public void modifyRoom(RoomRequestDto roomRequestDto, Long roomId) {
+        Room room = roomRepository.findById(roomId).get();
+        room.modRoom(roomRequestDto);
+        roomRepository.save(room);
+    }
 
+    @Override
+    public List<RoomRequestDto> getRoomList(Long userId) {
+        return null;
+    }
 }
