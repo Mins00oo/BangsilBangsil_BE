@@ -1,7 +1,7 @@
 package com.bangsil.bangsil.user.dto;
 
 import com.bangsil.bangsil.common.config.Role;
-import com.bangsil.bangsil.user.domain.User;
+import com.bangsil.bangsil.user.domain.UnAuthorizedUser;
 import com.bangsil.bangsil.utils.s3.dto.S3UploadDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
@@ -13,7 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
-
     private String email;
     private String pwd;
     private String nickname;
@@ -21,15 +20,13 @@ public class UserDto {
     private String phone;
     private String profileImgUrl;
 
-    public User toEntity(S3UploadDto s3UploadDto, String code) {
-        return User.builder()
+    public UnAuthorizedUser toEntity(S3UploadDto s3UploadDto, String code) {
+        return UnAuthorizedUser.builder()
                 .email(email)
-                .emailAuth(false)
                 .emailKey(code)
+                .emailAuth(false)
                 .pwd(pwd)
-                .nickname(nickname)
-                .role(role)
-                .phone(phone)
+                .role(Role.USER)
                 .s3UploadDto(s3UploadDto)
                 .build();
     }

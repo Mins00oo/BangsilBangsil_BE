@@ -1,7 +1,7 @@
 package com.bangsil.bangsil.user.domain;
 
-import com.bangsil.bangsil.common.BaseTimeEntity;
 import com.bangsil.bangsil.common.config.Role;
+import com.bangsil.bangsil.utils.s3.dto.S3UploadDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +13,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor
-public class User extends BaseTimeEntity {
-
+public class UnAuthorizedUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,6 +22,8 @@ public class User extends BaseTimeEntity {
     private String email;
 
     private Boolean emailAuth;
+
+    private String emailKey;
 
     private String pwd;
 
@@ -39,25 +40,22 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Comment("소셜 로그인 여부")
-    private String socialType;
-
     @Builder
-    public User(String email, String pwd, Boolean emailAuth, String profileImgPath, String saveName,
-                String originName, Role role, String socialType) {
+    public UnAuthorizedUser(String email, String emailKey, Boolean emailAuth, String pwd, S3UploadDto s3UploadDto,
+                            Role role) {
         this.email = email;
+        this.emailKey = emailKey;
         this.emailAuth = emailAuth;
-        this.pwd = pwd;
-        if (profileImgPath != null) {
-            this.profileImgPath = profileImgPath;
-            this.saveName = saveName;
-            this.originName = originName;
+        this.pwd = new BCryptPasswordEncoder().encode(pwd);
+        if (s3UploadDto != null) {
+            this.profileImgPath = s3UploadDto.getImgUrl();
+            this.saveName = s3UploadDto.getSaveName();
+            this.originName = s3UploadDto.getOriginName();
         }
         this.role = role;
-        this.socialType = socialType;
     }
 
-    public void changePw(String newPwd) {
-        this.pwd = new BCryptPasswordEncoder().encode(newPwd);
+    public void changeCode(String code) {
+        this.emailKey = code;
     }
 }
