@@ -60,6 +60,7 @@ public enum BaseResponseStatus {
     USER_RETRIEVE_FAILED(false, 4101, "유저 정보 조회에 실패했습니다."),
     USER_MODIFY_FAILED(false, 4102, "유저 정보 수정에 실패했습니다."),
     USER_DELETE_FAILED(false, 4103, "유저 정보 삭제에 실패했습니다."),
+    ALREADY_EXIST_USER(false, 4104, "이미 회원정보가 존재합니다."),
     INCORRECT_USER_PASSWORD(false, 4104, "유저의 비밀번호가 일치하지 않습니다"),
     EMAIL_AUTH_FAILED(false, 4105, "이메일 인증이 되지않은 유저입니다.");
 

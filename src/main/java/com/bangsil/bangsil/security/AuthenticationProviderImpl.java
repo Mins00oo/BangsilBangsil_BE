@@ -1,13 +1,10 @@
 package com.bangsil.bangsil.security;
 
-import com.bangsil.bangsil.common.BaseResponseStatus;
-import com.bangsil.bangsil.common.exception.BaseException;
 import com.bangsil.bangsil.user.domain.User;
 import com.bangsil.bangsil.user.infrastructure.UserRepository;
 import com.bangsil.bangsil.utils.jwt.UserDetailServiceImpl;
 import com.bangsil.bangsil.utils.jwt.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -42,7 +39,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
         }
 
-        if (user.getEmailAuth().equals(false)){
+        if (user.getEmailAuth().equals(false)) {
             throw new BadCredentialsException("이메일 인증이 되지 않았습니다.");
         }
 

@@ -74,8 +74,6 @@ public class OAuthAttributes {
 
         return User.builder()
                 .email(email)
-                .phone(mobile)
-                .nickname(nickname)
                 .role(Role.USER)
                 .socialType(socialType)
                 .build();
