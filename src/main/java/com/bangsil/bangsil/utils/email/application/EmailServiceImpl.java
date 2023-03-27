@@ -75,7 +75,7 @@ public class EmailServiceImpl implements EmailService {
         msgg += "<h1> 안녕하세요 방실방실입니다. </h1>";
         msgg += "<br>";
         msgg += "<p>아래 [링크]를 클릭하시면 이메일 인증이 완료됩니다.</p>";
-        msgg += "<a href='http://localhost:8081/api/v1/registerEmail?email=" + email +
+        msgg += "<a href='https://bangsil.co.kr/api/v1/registerEmail?email=" + email +
                 "&mail_key=" + emailKey +
                 "' target='_blank'>이메일 인증 확인</a>";
         msgg += "<p>감사합니다!<p>";
