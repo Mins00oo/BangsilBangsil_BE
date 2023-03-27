@@ -4,7 +4,6 @@ import com.bangsil.bangsil.common.BaseResponse;
 import com.bangsil.bangsil.room.application.RoomService;
 import com.bangsil.bangsil.room.dto.*;
 import com.bangsil.bangsil.utils.jwt.JwtTokenProvider;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +11,11 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.List;
 
 
 @RestController
@@ -25,7 +27,7 @@ public class RoomController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/room")
-    public ResponseEntity<Object> createRoom(HttpServletRequest httpServletRequest, @RequestBody ObjectNode  objectNode) throws JsonProcessingException {
+    public ResponseEntity<Object> createRoom(HttpServletRequest httpServletRequest, @RequestPart(value = "imgList", required = false) List<MultipartFile> multipartFileList, @RequestPart(value = "roomInfo") ObjectNode  objectNode) throws IOException {
 //        String token = jwtTokenProvider.getToken(httpServletRequest);
 //        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(token));
         ObjectMapper mapper = new ObjectMapper();
@@ -33,7 +35,7 @@ public class RoomController {
         RoomOptionDto roomOptionDto = mapper.treeToValue(objectNode.get("roomOptionDto"),RoomOptionDto.class);
         RoomAddOptionDto roomAddOptionDto = mapper.treeToValue(objectNode.get("roomAddOptionDto"),RoomAddOptionDto.class);
         RoomRequestDto roomRequestDto = new RoomRequestDto(roomBasicDto, roomOptionDto, roomAddOptionDto);
-        roomService.addRoom(roomRequestDto);
+        roomService.addRoom(roomRequestDto, multipartFileList);
         return new ResponseEntity(new BaseResponse(" "), HttpStatus.OK);
     }
 

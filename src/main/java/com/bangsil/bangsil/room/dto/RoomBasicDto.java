@@ -18,7 +18,11 @@ public class RoomBasicDto {
 
     private int deposit;
 
+    private int monthlyFee;
+
     private int maintenanceFee;
 
     private int windowDirection;
+
+    private int roomSize;
 }
