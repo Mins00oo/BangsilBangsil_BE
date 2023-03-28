@@ -25,8 +25,10 @@ public class RoomResponseDto {
                 .buildingName(room.getBuildingName())
                 .roomNumber(room.getRoomNumber())
                 .deposit(room.getDeposit())
+                .monthlyFee(room.getMonthlyFee())
                 .maintenanceFee(room.getMaintenanceFee())
                 .windowDirection(room.getWindowDirection())
+                .roomSize(room.getRoomSize())
                 .build();
         this.roomOptionDto = RoomOptionDto.builder()
                 .bed(room.getBed())

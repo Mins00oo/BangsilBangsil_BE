@@ -31,12 +31,16 @@ public class Room {
     @Column(name = "deposit")
     private int deposit;
 
+    @Column(name = "monthly_fee")
+    private int monthlyFee;
     @Column(name = "maintenance_fee")
     private int maintenanceFee;
 
     @Column(name = "window_direction")
     private int windowDirection;
 
+    @Column(name = "room_size")
+    private int roomSize;
     @Column(name = "bed")
     private Boolean bed;
 
@@ -97,15 +101,18 @@ public class Room {
     @Column(name = "add_visit_date")
     private Date addVisitDate;
 
+
     @Builder
-    public Room(Long id, User user, String buildingName, String roomNumber, int deposit, int maintenanceFee, int windowDirection, Boolean bed, Boolean tv, Boolean washingMachine, Boolean dryer, Boolean refrigerator, Boolean microwave, Boolean gasRange, Boolean induction, Boolean airConditioner, Boolean fullMirror, String addResidency, String addDetailAddress, String addMining, String addMold, String addDeafening, Integer addPowerSocket, Boolean addLeak, String addBugs, Date addMoveDate, Date addVisitDate) {
+    public Room(Long id, User user, String buildingName, String roomNumber, int deposit, int monthlyFee, int maintenanceFee, int windowDirection, int roomSize, Boolean bed, Boolean tv, Boolean washingMachine, Boolean dryer, Boolean refrigerator, Boolean microwave, Boolean gasRange, Boolean induction, Boolean airConditioner, Boolean fullMirror, String addResidency, String addDetailAddress, String addMining, String addMold, String addDeafening, Integer addPowerSocket, Boolean addLeak, String addBugs, Date addMoveDate, Date addVisitDate) {
         this.id = id;
         this.user = user;
         this.buildingName = buildingName;
         this.roomNumber = roomNumber;
         this.deposit = deposit;
+        this.monthlyFee = monthlyFee;
         this.maintenanceFee = maintenanceFee;
         this.windowDirection = windowDirection;
+        this.roomSize = roomSize;
         this.bed = bed;
         this.tv = tv;
         this.washingMachine = washingMachine;
@@ -129,14 +136,16 @@ public class Room {
     }
 
     @Builder
-    public Room(Long id, User user, String buildingName, String roomNumber, int deposit, int maintenanceFee, int windowDirection, Boolean bed, Boolean tv, Boolean washingMachine, Boolean dryer, Boolean refrigerator, Boolean microwave, Boolean gasRange, Boolean induction, Boolean airConditioner, Boolean fullMirror) {
+    public Room(Long id, User user, String buildingName, String roomNumber, int deposit, int monthlyFee, int maintenanceFee, int windowDirection, int roomSize, Boolean bed, Boolean tv, Boolean washingMachine, Boolean dryer, Boolean refrigerator, Boolean microwave, Boolean gasRange, Boolean induction, Boolean airConditioner, Boolean fullMirror) {
         this.id = id;
         this.user = user;
         this.buildingName = buildingName;
         this.roomNumber = roomNumber;
         this.deposit = deposit;
+        this.monthlyFee = monthlyFee;
         this.maintenanceFee = maintenanceFee;
         this.windowDirection = windowDirection;
+        this.roomSize = roomSize;
         this.bed = bed;
         this.tv = tv;
         this.washingMachine = washingMachine;
@@ -153,8 +162,10 @@ public class Room {
         this.buildingName = roomRequestDto.getRoomBasicDto().getBuildingName();
         this.roomNumber = roomRequestDto.getRoomBasicDto().getRoomNumber();
         this.deposit = roomRequestDto.getRoomBasicDto().getDeposit();
+        this.monthlyFee = roomRequestDto.getRoomBasicDto().getMonthlyFee();
         this.maintenanceFee = roomRequestDto.getRoomBasicDto().getMaintenanceFee();
         this.windowDirection = roomRequestDto.getRoomBasicDto().getWindowDirection();
+        this.roomSize = roomRequestDto.getRoomBasicDto().getRoomSize();
         this.bed = roomRequestDto.getRoomOptionDto().getBed();
         this.tv = roomRequestDto.getRoomOptionDto().getTv();
         this.washingMachine = roomRequestDto.getRoomOptionDto().getWashingMachine();
