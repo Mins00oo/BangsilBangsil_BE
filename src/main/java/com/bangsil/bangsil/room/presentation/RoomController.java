@@ -1,6 +1,7 @@
 package com.bangsil.bangsil.room.presentation;
 
 import com.bangsil.bangsil.common.BaseResponse;
+import com.bangsil.bangsil.common.exception.BaseException;
 import com.bangsil.bangsil.room.application.RoomService;
 import com.bangsil.bangsil.room.dto.*;
 import com.bangsil.bangsil.utils.jwt.JwtTokenProvider;
@@ -27,7 +28,7 @@ public class RoomController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/room")
-    public ResponseEntity<Object> createRoom(HttpServletRequest httpServletRequest, @RequestPart(value = "imgList", required = false) List<MultipartFile> multipartFileList, @RequestPart(value = "roomInfo") ObjectNode  objectNode) throws IOException {
+    public ResponseEntity<Object> createRoom(HttpServletRequest httpServletRequest, @RequestPart(value = "imgList", required = false) List<MultipartFile> multipartFileList, @RequestPart(value = "roomInfo") ObjectNode  objectNode) throws IOException, BaseException {
 //        String token = jwtTokenProvider.getToken(httpServletRequest);
 //        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(token));
         ObjectMapper mapper = new ObjectMapper();
@@ -43,6 +44,11 @@ public class RoomController {
     public ResponseEntity<Object> getRoom(@PathVariable Long roomId, HttpServletRequest httpServletRequest){
         RoomResponseDto roomResponseDto = roomService.getRoom(roomId);
         return new ResponseEntity(new BaseResponse(roomResponseDto),HttpStatus.OK);
+    }
+
+    @GetMapping("/room")
+    public ResponseEntity<Object> getRoomList(HttpServletRequest httpServletRequest){
+        return new ResponseEntity<>(new BaseResponse(" "),HttpStatus.OK);
     }
 
     @PutMapping("/room/{roomId}")
