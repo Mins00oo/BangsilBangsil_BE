@@ -1,5 +1,7 @@
 package com.bangsil.bangsil.room.application;
 
+import com.bangsil.bangsil.common.BaseResponseStatus;
+import com.bangsil.bangsil.common.exception.BaseException;
 import com.bangsil.bangsil.room.domain.Room;
 import com.bangsil.bangsil.room.domain.RoomImg;
 import com.bangsil.bangsil.room.dto.*;
@@ -10,6 +12,7 @@ import com.bangsil.bangsil.utils.s3.dto.S3UploadDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,14 +31,18 @@ public class RoomServiceImpl implements RoomService {
     private final RoomImgRepository roomImgRepository;
 
     @Override
-    public void addRoom(RoomRequestDto roomRequestDto, List<MultipartFile> multipartFileList) throws IOException {
+    public void addRoom(RoomRequestDto roomRequestDto, List<MultipartFile> multipartFileList) throws BaseException {
         Room room = roomRepository.save(roomRequestDto.toEntity(roomRequestDto));
-        if(!(multipartFileList.size() == 1 && multipartFileList.get(0).isEmpty())) {
-            for(MultipartFile multipartFile:multipartFileList) {
-                S3UploadDto s3UploadDto = s3UploaderService.upload(multipartFile, "bangsilbangsil", "roomImg");
-                RoomImgRequestDto roomImgRequestDto = new RoomImgRequestDto();
-                RoomImg roomImg = roomImgRepository.save(roomImgRequestDto.toEntity(room, s3UploadDto));
+        try {
+            if (!(multipartFileList.size() == 1 && multipartFileList.get(0).isEmpty())) {
+                for (MultipartFile multipartFile : multipartFileList) {
+                    S3UploadDto s3UploadDto = s3UploaderService.upload(multipartFile, "bangsilbangsil", "roomImg");
+                    RoomImgRequestDto roomImgRequestDto = new RoomImgRequestDto();
+                    RoomImg roomImg = roomImgRepository.save(roomImgRequestDto.toEntity(room, s3UploadDto));
+                }
             }
+        }catch (Exception e){
+            throw new BaseException(BaseResponseStatus.SUCCESS);
         }
     }
 
@@ -55,6 +62,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomRequestDto> getRoomList(Long userId) {
+
         return null;
     }
 }
