@@ -34,7 +34,7 @@ public class RoomServiceImpl implements RoomService {
     public void addRoom(RoomRequestDto roomRequestDto, List<MultipartFile> multipartFileList) throws BaseException {
         Room room = roomRepository.save(roomRequestDto.toEntity(roomRequestDto));
         try {
-            if (!(multipartFileList.size() == 1 && multipartFileList.get(0)==null)) {
+            if (!(multipartFileList.size() == 1 && multipartFileList.get(0).isEmpty())) {
                 for (MultipartFile multipartFile : multipartFileList) {
                     S3UploadDto s3UploadDto = s3UploaderService.upload(multipartFile, "bangsilbangsil", "roomImg");
                     RoomImgRequestDto roomImgRequestDto = new RoomImgRequestDto();
@@ -42,7 +42,7 @@ public class RoomServiceImpl implements RoomService {
                 }
             }
         }catch (Exception e){
-            throw new BaseException(BaseResponseStatus.SUCCESS);
+            return ;
         }
     }
 
