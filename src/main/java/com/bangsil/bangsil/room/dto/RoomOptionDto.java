@@ -10,6 +10,8 @@ import lombok.*;
 public class RoomOptionDto {
     private Boolean bed;
 
+    private Boolean desk;
+
     private Boolean tv;
 
     private Boolean washingMachine;

@@ -32,6 +32,7 @@ public class RoomResponseDto {
                 .build();
         this.roomOptionDto = RoomOptionDto.builder()
                 .bed(room.getBed())
+                .desk(room.getDesk())
                 .tv(room.getTv())
                 .washingMachine(room.getWashingMachine())
                 .dryer(room.getDryer())
