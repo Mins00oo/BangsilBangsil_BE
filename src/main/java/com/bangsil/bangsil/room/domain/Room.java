@@ -37,7 +37,7 @@ public class Room {
     private Integer maintenanceFee;
 
     @Column(name = "window_direction")
-    private Integer windowDirection;
+    private String windowDirection;
 
     @Column(name = "room_size")
     private Integer roomSize;
@@ -106,7 +106,7 @@ public class Room {
 
 
     @Builder
-    public Room(Long id, User user, String buildingName, String roomNumber, Integer deposit, Integer monthlyFee, Integer maintenanceFee, Integer windowDirection, Integer roomSize, Boolean bed, Boolean desk, Boolean tv, Boolean washingMachine, Boolean dryer, Boolean refrigerator, Boolean microwave, Boolean gasRange, Boolean induction, Boolean airConditioner, Boolean fullMirror, String addResidency, String addDetailAddress, String addMining, String addMold, String addDeafening, Integer addPowerSocket, Boolean addLeak, String addBugs, Date addMoveDate, Date addVisitDate) {
+    public Room(Long id, User user, String buildingName, String roomNumber, Integer deposit, Integer monthlyFee, Integer maintenanceFee, String windowDirection, Integer roomSize, Boolean bed, Boolean desk, Boolean tv, Boolean washingMachine, Boolean dryer, Boolean refrigerator, Boolean microwave, Boolean gasRange, Boolean induction, Boolean airConditioner, Boolean fullMirror, String addResidency, String addDetailAddress, String addMining, String addMold, String addDeafening, Integer addPowerSocket, Boolean addLeak, String addBugs, Date addMoveDate, Date addVisitDate) {
         this.id = id;
         this.user = user;
         this.buildingName = buildingName;
@@ -140,7 +140,7 @@ public class Room {
     }
 
     @Builder
-    public Room(Long id, User user, String buildingName, String roomNumber, Integer deposit, Integer monthlyFee, Integer maintenanceFee, Integer windowDirection, Integer roomSize, Boolean bed, Boolean desk, Boolean tv, Boolean washingMachine, Boolean dryer, Boolean refrigerator, Boolean microwave, Boolean gasRange, Boolean induction, Boolean airConditioner, Boolean fullMirror) {
+    public Room(Long id, User user, String buildingName, String roomNumber, Integer deposit, Integer monthlyFee, Integer maintenanceFee, String windowDirection, Integer roomSize, Boolean bed, Boolean desk, Boolean tv, Boolean washingMachine, Boolean dryer, Boolean refrigerator, Boolean microwave, Boolean gasRange, Boolean induction, Boolean airConditioner, Boolean fullMirror) {
         this.id = id;
         this.user = user;
         this.buildingName = buildingName;

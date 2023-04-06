@@ -22,7 +22,7 @@ public class RoomBasicDto {
 
     private Integer maintenanceFee;
 
-    private Integer windowDirection;
+    private String windowDirection;
 
     private Integer roomSize;
 }
