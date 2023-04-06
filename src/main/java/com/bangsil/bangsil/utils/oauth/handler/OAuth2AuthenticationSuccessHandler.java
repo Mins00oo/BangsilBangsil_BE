@@ -65,6 +65,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             String socialToken = jwtTokenProvider.createSocialToken(user.getId());
             url = sendExistInfoToRedirectUrI(socialToken, user.getId());
             response.addHeader("Authorization", socialToken);
+            getRedirectStrategy().sendRedirect(request, response, url);
         } else {
             if (socialType.equals("naver")) {
                 response.setCharacterEncoding("UTF-8");

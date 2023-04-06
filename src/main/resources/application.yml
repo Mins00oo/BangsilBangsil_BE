@@ -7,7 +7,7 @@ spring:
     password: '1234'
     port: 6379
   profiles:
-    include: prod
+    include: local
   servlet:
     multipart:
       max-file-size: 50MB
@@ -21,7 +21,7 @@ spring:
             authorization-grant-type: authorization_code
             client-id: 693c5c83de59c1a45ea35b29b4de1933
             client-secret: wjEUwBMVAXEiASeRTsAsSzJX6tB2FYrk
-            scope: profile_nickname, account_email
+            scope: account_email
             client-authentication-method: POST
             redirect-uri: 'http://localhost:8081/login/oauth2/code/social'
             client-name: kakao

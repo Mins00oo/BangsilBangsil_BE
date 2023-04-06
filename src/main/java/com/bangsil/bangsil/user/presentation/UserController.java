@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -20,6 +21,7 @@ import java.util.Objects;
 @RequestMapping("/api/v1")
 @Slf4j
 @RequiredArgsConstructor
+@EnableWebMvc
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
     private final UserService userService;
@@ -34,7 +36,7 @@ public class UserController {
      */
     @PostMapping("/signup")
     public BaseResponse<Object> createUser(@Valid @RequestPart UserDto userDto,
-                                           @RequestPart(value = "profileImg", required = false) MultipartFile multipartFile) {
+                                           @RequestPart(value = "profileImg") MultipartFile multipartFile) {
         try {
             if (multipartFile != null && !multipartFile.isEmpty()) {
                 userService.createUser(userDto, multipartFile);
