@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Map;
 
@@ -15,21 +17,16 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 @Getter
+@Configuration
 public class OAuthAttributes {
     private Map<String, Object> attributes;
     private String nameAttributeKey;
-    private String nickname;
-    private String mobile;
-    private String gender;
     private String email;
     private Role role;
 
     public static OAuthAttributes of(String registrationId,
                                      String userNameAttributeName,
                                      Map<String, Object> attributes) {
-        if (registrationId.equals("naver")) {
-            return ofNaver("id", attributes);
-        }
         if (registrationId.equals("kakao")) {
             return ofKakao(attributes);
         }
@@ -40,40 +37,25 @@ public class OAuthAttributes {
 
         return OAuthAttributes.builder()
                 .email(String.valueOf(attributes.get("email")))
-                .nickname(String.valueOf(attributes.get("name")))
                 .attributes(attributes)
-                .nameAttributeKey(userNameAttributeName)
-                .build();
-    }
-
-    private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
-        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
-
-        return OAuthAttributes.builder()
-                .email(String.valueOf(response.get("email")))
-                .mobile(String.valueOf(response.get("mobile")))
-                .gender(String.valueOf(response.get("gender")))
-                .nickname(String.valueOf(response.get("nickname")))
-                .attributes(response)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
     }
 
     private static OAuthAttributes ofKakao(Map<String, Object> attributes) {
         Map<String, Object> kakao_account = (Map<String, Object>) attributes.get("kakao_account");
-        Map<String, Object> kakao_profile = (Map<String, Object>) kakao_account.get("profile");
         return OAuthAttributes.builder()
                 .email(String.valueOf(kakao_account.get("email")))
-                .nickname(String.valueOf(kakao_profile.get("nickname")))
                 .attributes(attributes)
                 .nameAttributeKey("id")
+                .role(Role.USER)
                 .build();
     }
 
     public User toEntity(String socialType) {
-
         return User.builder()
                 .email(email)
+                .pwd(new BCryptPasswordEncoder().encode("1234"))
                 .role(Role.USER)
                 .socialType(socialType)
                 .build();

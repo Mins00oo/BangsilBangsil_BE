@@ -66,7 +66,6 @@ public class UserServiceImpl implements UserService {
                 user.changeCode(code);
             } else
                 unAuthorizedUserRepository.save(unAuthorizedUser);
-
             try {
                 emailService.send(userDto.getEmail(), code);
             } catch (Exception e) {
@@ -89,13 +88,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void modifyUserPw(ModifyPwDto modifyPwDto, Long userId) throws BaseException {
         User user = userProvider.retrieveUser(userId);
-
         if (!bCryptPasswordEncoder.matches(modifyPwDto.getOldPwd(), user.getPwd())) {
             throw new BaseException(BaseResponseStatus.INCORRECT_USER_PASSWORD);
         }
-
         user.changePw(modifyPwDto.getNewPwd());
-
     }
 
     @Transactional

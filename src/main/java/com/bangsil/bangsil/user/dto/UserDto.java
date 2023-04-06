@@ -15,10 +15,6 @@ import lombok.Setter;
 public class UserDto {
     private String email;
     private String pwd;
-    private String nickname;
-    private Role role;
-    private String phone;
-    private String profileImgUrl;
 
     public UnAuthorizedUser toEntity(S3UploadDto s3UploadDto, String code) {
         return UnAuthorizedUser.builder()
