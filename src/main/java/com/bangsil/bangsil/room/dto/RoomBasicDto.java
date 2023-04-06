@@ -16,13 +16,13 @@ public class RoomBasicDto {
 
     private String roomNumber;
 
-    private int deposit;
+    private Integer deposit;
 
-    private int monthlyFee;
+    private Integer monthlyFee;
 
-    private int maintenanceFee;
+    private Integer maintenanceFee;
 
-    private int windowDirection;
+    private Integer windowDirection;
 
-    private int roomSize;
+    private Integer roomSize;
 }

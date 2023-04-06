@@ -11,6 +11,7 @@ public enum BaseResponseStatus {
      * 1000 : 요청 성공
      */
     SUCCESS(true, 1000, "요청에 성공하였습니다."),
+    SUCCESS_NULLPOINT(true, 1001, "요청에 성공하였지만 빈 값이 존재합니다."),
 
     /**
      * 2000 : Request 오류
@@ -39,6 +40,7 @@ public enum BaseResponseStatus {
      */
     // Common
     NO_LOOKUP_VALUE(false, 3000, "조회된 데이터가 없습니다."),
+    ROOM_CREATE_FAILED(false, 3100, "방 정보 생성에 실패했습니다."),
 
     // Room
 

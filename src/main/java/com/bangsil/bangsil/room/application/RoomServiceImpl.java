@@ -1,5 +1,6 @@
 package com.bangsil.bangsil.room.application;
 
+import com.bangsil.bangsil.common.BaseResponse;
 import com.bangsil.bangsil.common.BaseResponseStatus;
 import com.bangsil.bangsil.common.exception.BaseException;
 import com.bangsil.bangsil.room.domain.Room;
@@ -14,6 +15,7 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -31,18 +33,26 @@ public class RoomServiceImpl implements RoomService {
     private final RoomImgRepository roomImgRepository;
 
     @Override
-    public void addRoom(RoomRequestDto roomRequestDto, List<MultipartFile> multipartFileList) throws BaseException {
-        Room room = roomRepository.save(roomRequestDto.toEntity(roomRequestDto));
+    public BaseResponse addRoom(RoomRequestDto roomRequestDto, List<MultipartFile> multipartFileList) {
         try {
-            if (!(multipartFileList.size() == 1 && multipartFileList.get(0).isEmpty())) {
-                for (MultipartFile multipartFile : multipartFileList) {
-                    S3UploadDto s3UploadDto = s3UploaderService.upload(multipartFile, "bangsilbangsil", "roomImg");
-                    RoomImgRequestDto roomImgRequestDto = new RoomImgRequestDto();
-                    RoomImg roomImg = roomImgRepository.save(roomImgRequestDto.toEntity(room, s3UploadDto));
+            Room room = roomRepository.save(roomRequestDto.toEntity(roomRequestDto));
+            if(!(multipartFileList.size() == 0 || multipartFileList.isEmpty())) {
+                if (!(multipartFileList.size() == 1 && multipartFileList.get(0).isEmpty())) {
+                    for (MultipartFile multipartFile : multipartFileList) {
+                        S3UploadDto s3UploadDto = s3UploaderService.upload(multipartFile, "bangsilbangsil", "roomImg");
+                        RoomImgRequestDto roomImgRequestDto = new RoomImgRequestDto();
+                        RoomImg roomImg = roomImgRepository.save(roomImgRequestDto.toEntity(room, s3UploadDto));
+                    }
+                    return new BaseResponse(BaseResponseStatus.SUCCESS);
+                }else {
+                    return new BaseResponse(BaseResponseStatus.SUCCESS_NULLPOINT);
                 }
+            }else {
+                return new BaseResponse(BaseResponseStatus.SUCCESS_NULLPOINT);
             }
         }catch (Exception e){
-            return ;
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new BaseResponse(BaseResponseStatus.ROOM_CREATE_FAILED);
         }
     }
 

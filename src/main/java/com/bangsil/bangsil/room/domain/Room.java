@@ -29,20 +29,23 @@ public class Room {
     private String roomNumber;
 
     @Column(name = "deposit")
-    private int deposit;
+    private Integer deposit;
 
     @Column(name = "monthly_fee")
-    private int monthlyFee;
+    private Integer monthlyFee;
     @Column(name = "maintenance_fee")
-    private int maintenanceFee;
+    private Integer maintenanceFee;
 
     @Column(name = "window_direction")
-    private int windowDirection;
+    private Integer windowDirection;
 
     @Column(name = "room_size")
-    private int roomSize;
+    private Integer roomSize;
     @Column(name = "bed")
     private Boolean bed;
+
+    @Column(name = "desk")
+    private Boolean desk;
 
     @Column(name = "tv")
     private Boolean tv;
@@ -103,7 +106,7 @@ public class Room {
 
 
     @Builder
-    public Room(Long id, User user, String buildingName, String roomNumber, int deposit, int monthlyFee, int maintenanceFee, int windowDirection, int roomSize, Boolean bed, Boolean tv, Boolean washingMachine, Boolean dryer, Boolean refrigerator, Boolean microwave, Boolean gasRange, Boolean induction, Boolean airConditioner, Boolean fullMirror, String addResidency, String addDetailAddress, String addMining, String addMold, String addDeafening, Integer addPowerSocket, Boolean addLeak, String addBugs, Date addMoveDate, Date addVisitDate) {
+    public Room(Long id, User user, String buildingName, String roomNumber, Integer deposit, Integer monthlyFee, Integer maintenanceFee, Integer windowDirection, Integer roomSize, Boolean bed, Boolean desk, Boolean tv, Boolean washingMachine, Boolean dryer, Boolean refrigerator, Boolean microwave, Boolean gasRange, Boolean induction, Boolean airConditioner, Boolean fullMirror, String addResidency, String addDetailAddress, String addMining, String addMold, String addDeafening, Integer addPowerSocket, Boolean addLeak, String addBugs, Date addMoveDate, Date addVisitDate) {
         this.id = id;
         this.user = user;
         this.buildingName = buildingName;
@@ -114,6 +117,7 @@ public class Room {
         this.windowDirection = windowDirection;
         this.roomSize = roomSize;
         this.bed = bed;
+        this.desk = desk;
         this.tv = tv;
         this.washingMachine = washingMachine;
         this.dryer = dryer;
@@ -136,7 +140,7 @@ public class Room {
     }
 
     @Builder
-    public Room(Long id, User user, String buildingName, String roomNumber, int deposit, int monthlyFee, int maintenanceFee, int windowDirection, int roomSize, Boolean bed, Boolean tv, Boolean washingMachine, Boolean dryer, Boolean refrigerator, Boolean microwave, Boolean gasRange, Boolean induction, Boolean airConditioner, Boolean fullMirror) {
+    public Room(Long id, User user, String buildingName, String roomNumber, Integer deposit, Integer monthlyFee, Integer maintenanceFee, Integer windowDirection, Integer roomSize, Boolean bed, Boolean desk, Boolean tv, Boolean washingMachine, Boolean dryer, Boolean refrigerator, Boolean microwave, Boolean gasRange, Boolean induction, Boolean airConditioner, Boolean fullMirror) {
         this.id = id;
         this.user = user;
         this.buildingName = buildingName;
@@ -147,6 +151,7 @@ public class Room {
         this.windowDirection = windowDirection;
         this.roomSize = roomSize;
         this.bed = bed;
+        this.desk = desk;
         this.tv = tv;
         this.washingMachine = washingMachine;
         this.dryer = dryer;
@@ -167,6 +172,7 @@ public class Room {
         this.windowDirection = roomRequestDto.getRoomBasicDto().getWindowDirection();
         this.roomSize = roomRequestDto.getRoomBasicDto().getRoomSize();
         this.bed = roomRequestDto.getRoomOptionDto().getBed();
+        this.desk = roomRequestDto.getRoomOptionDto().getDesk();
         this.tv = roomRequestDto.getRoomOptionDto().getTv();
         this.washingMachine = roomRequestDto.getRoomOptionDto().getWashingMachine();
         this.dryer = roomRequestDto.getRoomOptionDto().getDryer();

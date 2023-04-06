@@ -29,6 +29,7 @@ public class RoomRequestDto {
                 .windowDirection(roomRequestDto.getRoomBasicDto().getWindowDirection())
                 .roomSize(roomRequestDto.getRoomBasicDto().getRoomSize())
                 .bed(roomRequestDto.getRoomOptionDto().getBed())
+                .desk(roomRequestDto.getRoomOptionDto().getDesk())
                 .tv(roomRequestDto.getRoomOptionDto().getTv())
                 .washingMachine(roomRequestDto.getRoomOptionDto().getWashingMachine())
                 .dryer(roomRequestDto.getRoomOptionDto().getDryer())
