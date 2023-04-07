@@ -2,10 +2,11 @@ package com.bangsil.bangsil.room.application;
 
 import com.bangsil.bangsil.common.BaseResponse;
 import com.bangsil.bangsil.common.BaseResponseStatus;
-import com.bangsil.bangsil.common.exception.BaseException;
 import com.bangsil.bangsil.room.domain.Room;
 import com.bangsil.bangsil.room.domain.RoomImg;
-import com.bangsil.bangsil.room.dto.*;
+import com.bangsil.bangsil.room.dto.RoomImgRequestDto;
+import com.bangsil.bangsil.room.dto.RoomRequestDto;
+import com.bangsil.bangsil.room.dto.RoomResponseDto;
 import com.bangsil.bangsil.room.infrastructure.RoomImgRepository;
 import com.bangsil.bangsil.room.infrastructure.RoomRepository;
 import com.bangsil.bangsil.utils.s3.S3UploaderService;
@@ -13,12 +14,11 @@ import com.bangsil.bangsil.utils.s3.dto.S3UploadDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -33,10 +33,11 @@ public class RoomServiceImpl implements RoomService {
     private final RoomImgRepository roomImgRepository;
 
     @Override
+    @Transactional
     public BaseResponse addRoom(RoomRequestDto roomRequestDto, List<MultipartFile> multipartFileList) {
         try {
             Room room = roomRepository.save(roomRequestDto.toEntity(roomRequestDto));
-            if(!(multipartFileList.size() == 0 || multipartFileList.isEmpty())) {
+            if(!(multipartFileList == null )) {
                 if (!(multipartFileList.size() == 1 && multipartFileList.get(0).isEmpty())) {
                     for (MultipartFile multipartFile : multipartFileList) {
                         S3UploadDto s3UploadDto = s3UploaderService.upload(multipartFile, "bangsilbangsil", "roomImg");

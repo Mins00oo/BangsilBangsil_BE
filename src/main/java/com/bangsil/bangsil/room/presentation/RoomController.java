@@ -36,8 +36,8 @@ public class RoomController {
         RoomOptionDto roomOptionDto = mapper.treeToValue(objectNode.get("roomOptionDto"),RoomOptionDto.class);
         RoomAddOptionDto roomAddOptionDto = mapper.treeToValue(objectNode.get("roomAddOptionDto"),RoomAddOptionDto.class);
         RoomRequestDto roomRequestDto = new RoomRequestDto(roomBasicDto, roomOptionDto, roomAddOptionDto);
-        roomService.addRoom(roomRequestDto, multipartFileList);
-        return new ResponseEntity(new BaseResponse(" "), HttpStatus.OK);
+//        roomService.addRoom(roomRequestDto, multipartFileList);
+        return new ResponseEntity(roomService.addRoom(roomRequestDto, multipartFileList), HttpStatus.OK);
     }
 
     @GetMapping("/room/{roomId}")
