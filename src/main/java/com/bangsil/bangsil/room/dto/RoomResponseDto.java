@@ -21,7 +21,7 @@ public class RoomResponseDto {
     public RoomResponseDto(Room room){
         this.id = room.getId();
         this.roomBasicDto = RoomBasicDto.builder()
-                .userId(room.getUser())
+                .userId(room.getUser().getId())
                 .buildingName(room.getBuildingName())
                 .roomNumber(room.getRoomNumber())
                 .deposit(room.getDeposit())
