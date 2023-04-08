@@ -31,6 +31,13 @@ public class BaseResponse<T> {
         this.result = null;
     }
 
+    public BaseResponse(BaseResponseStatus status, T result) {
+        this.isSuccess = status.isSuccess();
+        this.message = status.getMessage();
+        this.code = status.getCode();
+        this.result = result;
+    }
+
     // 요청에 실패한 경우 (BadRequest)
     public BaseResponse(String details, String timestamp) {
         this.isSuccess = BaseResponseStatus.BAD_REQUEST.isSuccess();

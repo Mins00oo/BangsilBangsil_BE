@@ -31,29 +31,28 @@ public class RoomController {
     public ResponseEntity<Object> createRoom(HttpServletRequest httpServletRequest, @RequestPart(value = "imgList", required = false) List<MultipartFile> multipartFileList, @RequestPart(value = "roomInfo") ObjectNode  objectNode) throws IOException, BaseException {
 //        String token = jwtTokenProvider.getToken(httpServletRequest);
 //        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(token));
-        ObjectMapper mapper = new ObjectMapper();
-        RoomBasicDto roomBasicDto = mapper.treeToValue(objectNode.get("roomBasicDto"),RoomBasicDto.class);
-        RoomOptionDto roomOptionDto = mapper.treeToValue(objectNode.get("roomOptionDto"),RoomOptionDto.class);
-        RoomAddOptionDto roomAddOptionDto = mapper.treeToValue(objectNode.get("roomAddOptionDto"),RoomAddOptionDto.class);
-        RoomRequestDto roomRequestDto = new RoomRequestDto(roomBasicDto, roomOptionDto, roomAddOptionDto);
-        roomService.addRoom(roomRequestDto, multipartFileList);
-        return new ResponseEntity(new BaseResponse(" "), HttpStatus.OK);
+        BaseResponse baseResponse = roomService.addRoom(objectNode, multipartFileList);
+        return new ResponseEntity(baseResponse, HttpStatus.OK);
     }
 
     @GetMapping("/room/{roomId}")
     public ResponseEntity<Object> getRoom(@PathVariable Long roomId, HttpServletRequest httpServletRequest){
-        RoomResponseDto roomResponseDto = roomService.getRoom(roomId);
-        return new ResponseEntity(new BaseResponse(roomResponseDto),HttpStatus.OK);
+        BaseResponse baseResponse = roomService.getRoom(roomId);
+        return new ResponseEntity(baseResponse,HttpStatus.OK);
     }
 
     @GetMapping("/room")
     public ResponseEntity<Object> getRoomList(HttpServletRequest httpServletRequest){
-        return new ResponseEntity<>(new BaseResponse(" "),HttpStatus.OK);
+        String token = jwtTokenProvider.getToken(httpServletRequest);
+        Long userId = jwtTokenProvider.getUserPk(token);
+        BaseResponse baseResponse = roomService.getRoomList(userId);
+        return new ResponseEntity(baseResponse,HttpStatus.OK);
     }
 
     @PutMapping("/room/{roomId}")
     public ResponseEntity<Object> modifyRoom(HttpServletRequest httpServletRequest, @RequestBody RoomRequestDto roomRequestDto, @PathVariable Long roomId){
-        roomService.modifyRoom(roomRequestDto,roomId);
-        return new ResponseEntity(new BaseResponse(" "),HttpStatus.OK);
+        BaseResponse baseResponse = roomService.modifyRoom(roomRequestDto,roomId);
+        return new ResponseEntity(baseResponse,HttpStatus.OK);
     }
+
 }

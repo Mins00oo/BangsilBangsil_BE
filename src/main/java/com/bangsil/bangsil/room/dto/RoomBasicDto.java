@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 public class RoomBasicDto {
 
-    private User userId;
+    private Long userId;
 
     private String buildingName;
 
