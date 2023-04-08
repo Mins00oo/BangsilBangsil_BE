@@ -11,7 +11,6 @@ import com.bangsil.bangsil.user.infrastructure.UserRepository;
 import com.bangsil.bangsil.utils.email.application.EmailServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestReporter;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -73,7 +72,7 @@ public class UserServiceImplTest {
 
     @Test
     @DisplayName("이메일 중복이 되지 않음을 처리")
-    public void emailNotDuplicateCheck(TestReporter testReporter) throws Exception {
+    public void emailNotDuplicateCheck() throws Exception {
         // given
         String email = "test@gmail.com";
         when(userRepository.existsByEmail(email)).thenReturn(false);
