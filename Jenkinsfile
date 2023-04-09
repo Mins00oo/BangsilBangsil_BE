@@ -52,10 +52,7 @@ pipeline {
                 sh 'docker images -f dangling=true && \
                 docker rmi $(docker images -f dangling=true -q)'
 
-                sh 'docker run -d --name bangsil-user \
-                -p 8081:8081 \
-                -v /etc/localtime:/etc/localtime:ro \
-                bangsil-user:latest'
+                sh 'docker compose up -d'
             }
 
             post {
@@ -68,5 +65,6 @@ pipeline {
                 }
             }
         }
+
     }
 }
