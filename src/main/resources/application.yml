@@ -7,7 +7,7 @@ spring:
     password: ENC(Zr2bEyfTWn5jlrckRVnUxw==)
     port: 6379
   profiles:
-    include: local
+    include: prod
   servlet:
     multipart:
       max-file-size: 50MB
