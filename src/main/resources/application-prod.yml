@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://bangsilbangsil.ccyiuf1jtpua.ap-northeast-2.rds.amazonaws.com:3306/bangsilbangsil
-    username: bangsilbangsil
-    password: qkdtlfqkdtlf!
+    url: ENC(ioncL6qXtLLyY2+x7ulsuzsEKFuZeYl7JZF/WgV6rUvMmxsvkyfO8rWXyBCT36mZmx7yrzoIN9F7uT4QvJBlAn9u63BEgv1uWnGgQUInKLIZ9+/J6BXcpQRhu3/86qEIIUxvlI7r38s=)
+    username: ENC(h2KxMAsyt5h1J6IJOu27FRMQ4Jf7WZUE)
+    password: ENC(B6GbSJDZpAEHhsGK1aQ5AB7jTmsA67gY)
   jpa:
     hibernate:
       ddl-auto: update
