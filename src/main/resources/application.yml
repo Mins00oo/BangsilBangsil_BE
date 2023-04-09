@@ -7,7 +7,7 @@ spring:
     password: ENC(Zr2bEyfTWn5jlrckRVnUxw==)
     port: 6379
   profiles:
-    include: prod
+    include: local
   servlet:
     multipart:
       max-file-size: 50MB
@@ -19,8 +19,8 @@ spring:
         registration:
           kakao:
             authorization-grant-type: authorization_code
-            client-id: ENC(mZmCI0hcd77vbcsJGiDVQUzr+Kk2Hg70j1FsZvNF+F3+Uxl7zZdB6G4ICPJ5XYjQ)
-            client-secret: wjEUwBMVAXEiASeRTsAsSzJX6tB2FYrk
+            client-id: ENC(mgHwdlJciKfhJAWgEZSHtlnOjwg9JTOTOJYZ+T5rNhEvL1yK1HlWfg1MyUxha/UJ)
+            client-secret: ENC(MqoEVX2dDDGXW7lLDynYpwpwT8jbEXy66CHcleKj3Dpn5iIPuPeUnSTdMgBmGnOm)
             scope: account_email
             client-authentication-method: POST
             redirect-uri: 'http://localhost:8081/login/oauth2/code/social'
@@ -38,7 +38,7 @@ logging:
       hibernate: info
 
 token:
-  secret: 'secretkey'
+  secret: ENC(4+qZwm4yJeuW8bFmDuIYL6ukCBOR1jZE)
 
 cloud:
   aws:

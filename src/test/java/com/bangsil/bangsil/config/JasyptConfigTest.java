@@ -10,10 +10,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class JasyptConfigTest {
 
     @Test
-    void jasypt(){
-        String url = "jdbc:mysql://localhost:3306/bangsil_user";
-        String username = "bangsilbangsil";
-        String password = "1234";
+    void jasypt() {
+        String url = "693c5c83de59c1a45ea35b29b4de1933";
+        String username = "wjEUwBMVAXEiASeRTsAsSzJX6tB2FYrk";
+        String password = "qkd03010000tlf";
 
         String encryptUrl = jasyptEncrypt(url);
         String encryptUsername = jasyptEncrypt(username);
@@ -34,7 +34,7 @@ public class JasyptConfigTest {
         return encryptor.encrypt(input);
     }
 
-    private String jasyptDecryt(String input){
+    private String jasyptDecryt(String input) {
         String key = "1234";
         StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
         encryptor.setAlgorithm("PBEWithMD5AndDES");
