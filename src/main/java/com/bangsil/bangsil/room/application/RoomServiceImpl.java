@@ -67,6 +67,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public BaseResponse getRoom(Long roomId) {
         Room room = roomRepository.findById(roomId).get();
+        List<RoomImg> roomImgList = roomImgRepository.findByRoom_Id(roomId);
         RoomResponseDto roomResponseDto = new RoomResponseDto(room);
         return new BaseResponse(BaseResponseStatus.SUCCESS,roomResponseDto);
     }
