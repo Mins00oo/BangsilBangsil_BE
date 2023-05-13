@@ -77,8 +77,13 @@ public class RoomServiceImpl implements RoomService {
     public BaseResponse getRoom(Long roomId) {
         Room room = roomRepository.findById(roomId).get();
         List<RoomImg> roomImgList = roomImgRepository.findByRoom_Id(roomId);
-        RoomResponseDto roomResponseDto = new RoomResponseDto(room);
-        return new BaseResponse(BaseResponseStatus.SUCCESS,roomResponseDto);
+        List<RoomImgResponseDto> roomImgResponseDtoList = new ArrayList<>();
+        for(RoomImg roomImg:roomImgList){
+            roomImgResponseDtoList.add(new RoomImgResponseDto(roomImg));
+        }
+        RoomDetailResponseDto roomDetailResponseDto = new RoomDetailResponseDto(room,roomImgResponseDtoList);
+//        RoomResponseDto roomResponseDto = new RoomResponseDto(room);
+        return new BaseResponse(BaseResponseStatus.SUCCESS,roomDetailResponseDto);
     }
 
     @Override

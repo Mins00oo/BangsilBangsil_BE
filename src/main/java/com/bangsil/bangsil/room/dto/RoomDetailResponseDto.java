@@ -1,9 +1,12 @@
 package com.bangsil.bangsil.room.dto;
 
 import com.bangsil.bangsil.room.domain.Room;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
 public class RoomDetailResponseDto {
     private Long id;
 
@@ -13,9 +16,9 @@ public class RoomDetailResponseDto {
 
     private RoomAddOptionDto roomAddOptionDto;
 
-    private List<String> roomImgList;
+    private List<RoomImgResponseDto> roomImgResponseDtoList;
 
-    public RoomDetailResponseDto(Room room, List<String> roomImgList){
+    public RoomDetailResponseDto(Room room, List<RoomImgResponseDto> roomImgResponseDtoList){
         this.id = room.getId();
         this.roomBasicDto = RoomBasicDto.builder()
                 .userId(room.getUser().getId())
@@ -52,6 +55,6 @@ public class RoomDetailResponseDto {
                 .addMoveDate(room.getAddMoveDate())
                 .addVisitDate(room.getAddVisitDate())
                 .build();
-        this.roomImgList = roomImgList;
+        this.roomImgResponseDtoList = roomImgResponseDtoList;
     }
 }
