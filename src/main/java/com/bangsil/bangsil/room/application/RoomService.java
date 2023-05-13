@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface RoomService {
 
-    BaseResponse addRoom(ObjectNode objectNode, List<MultipartFile> multipartFileList) throws JsonProcessingException;
+    BaseResponse addRoom(ObjectNode objectNode, List<MultipartFile> multipartFileList,Long userId) throws JsonProcessingException, BaseException;
 
     BaseResponse getRoom(Long roomId);
 

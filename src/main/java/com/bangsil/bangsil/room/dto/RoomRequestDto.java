@@ -1,6 +1,7 @@
 package com.bangsil.bangsil.room.dto;
 
 import com.bangsil.bangsil.room.domain.Room;
+import com.bangsil.bangsil.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +20,11 @@ public class RoomRequestDto {
 
     private RoomAddOptionDto roomAddOptionDto;
 
+    private User user;
+
     public Room toEntity(final RoomRequestDto roomRequestDto){
         return Room.builder()
+                .user(roomRequestDto.getUser())
                 .buildingName(roomRequestDto.getRoomBasicDto().getBuildingName())
                 .roomNumber(roomRequestDto.getRoomBasicDto().getRoomNumber())
                 .deposit(roomRequestDto.getRoomBasicDto().getDeposit())

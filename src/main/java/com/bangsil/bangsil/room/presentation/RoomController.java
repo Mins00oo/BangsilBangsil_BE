@@ -29,14 +29,16 @@ public class RoomController {
 
     @PostMapping("/room")
     public ResponseEntity<Object> createRoom(HttpServletRequest httpServletRequest, @RequestPart(value = "imgList", required = false) List<MultipartFile> multipartFileList, @RequestPart(value = "roomInfo") ObjectNode  objectNode) throws IOException, BaseException {
-//        String token = jwtTokenProvider.getToken(httpServletRequest);
-//        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(token));
-        BaseResponse baseResponse = roomService.addRoom(objectNode, multipartFileList);
+        String token = jwtTokenProvider.getToken(httpServletRequest);
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(token));
+        BaseResponse baseResponse = roomService.addRoom(objectNode, multipartFileList, userId);
         return new ResponseEntity(baseResponse, HttpStatus.OK);
     }
 
     @GetMapping("/room/{roomId}")
     public ResponseEntity<Object> getRoom(@PathVariable Long roomId, HttpServletRequest httpServletRequest){
+        String token = jwtTokenProvider.getToken(httpServletRequest);
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(token));
         BaseResponse baseResponse = roomService.getRoom(roomId);
         return new ResponseEntity(baseResponse,HttpStatus.OK);
     }
@@ -51,6 +53,8 @@ public class RoomController {
 
     @PutMapping("/room/{roomId}")
     public ResponseEntity<Object> modifyRoom(HttpServletRequest httpServletRequest, @RequestBody RoomRequestDto roomRequestDto, @PathVariable Long roomId){
+        String token = jwtTokenProvider.getToken(httpServletRequest);
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(token));
         BaseResponse baseResponse = roomService.modifyRoom(roomRequestDto,roomId);
         return new ResponseEntity(baseResponse,HttpStatus.OK);
     }
