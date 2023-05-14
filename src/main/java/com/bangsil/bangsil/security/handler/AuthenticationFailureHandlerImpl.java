@@ -1,6 +1,7 @@
 package com.bangsil.bangsil.security.handler;
 
 import com.bangsil.bangsil.common.BaseResponse;
+import com.bangsil.bangsil.common.BaseResponseStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,11 +29,9 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
 
         response.setCharacterEncoding("UTF-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(204);
+        response.setStatus(200);
 
-        String result = "로그인 정보를 다시 확인해주세요!";
-
-        BaseResponse<String> baseResponse = new BaseResponse<>(result);
+        BaseResponse<String> baseResponse = new BaseResponse<>(BaseResponseStatus.LOGIN_REQUEST_FAILED);
 
 
         mapper.writeValue(response.getWriter(), baseResponse);
