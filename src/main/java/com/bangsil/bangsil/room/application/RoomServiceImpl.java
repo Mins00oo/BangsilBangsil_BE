@@ -2,11 +2,14 @@ package com.bangsil.bangsil.room.application;
 
 import com.bangsil.bangsil.common.BaseResponse;
 import com.bangsil.bangsil.common.BaseResponseStatus;
+import com.bangsil.bangsil.common.exception.BaseException;
 import com.bangsil.bangsil.room.domain.Room;
 import com.bangsil.bangsil.room.domain.RoomImg;
 import com.bangsil.bangsil.room.dto.*;
 import com.bangsil.bangsil.room.infrastructure.RoomImgRepository;
 import com.bangsil.bangsil.room.infrastructure.RoomRepository;
+import com.bangsil.bangsil.user.domain.User;
+import com.bangsil.bangsil.user.infrastructure.UserRepository;
 import com.bangsil.bangsil.utils.s3.S3UploaderService;
 import com.bangsil.bangsil.utils.s3.dto.S3UploadDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,11 +25,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static com.bangsil.bangsil.common.BaseResponseStatus.ROOM_CREATE_FAILED;
 
 @Service
 @RequiredArgsConstructor
 @Log4j2
 public class RoomServiceImpl implements RoomService {
+
+    private final UserRepository userRepository;
     private final RoomRepository roomRepository;
 
     private final ModelMapper modelMapper;
@@ -36,12 +44,13 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional
-    public BaseResponse addRoom(ObjectNode objectNode, List<MultipartFile> multipartFileList) throws JsonProcessingException {
+    public BaseResponse addRoom(ObjectNode objectNode, List<MultipartFile> multipartFileList,Long userId) throws JsonProcessingException, BaseException {
         ObjectMapper mapper = new ObjectMapper();
         RoomBasicDto roomBasicDto = mapper.treeToValue(objectNode.get("roomBasicDto"),RoomBasicDto.class);
         RoomOptionDto roomOptionDto = mapper.treeToValue(objectNode.get("roomOptionDto"),RoomOptionDto.class);
         RoomAddOptionDto roomAddOptionDto = mapper.treeToValue(objectNode.get("roomAddOptionDto"),RoomAddOptionDto.class);
-        RoomRequestDto roomRequestDto = new RoomRequestDto(roomBasicDto, roomOptionDto, roomAddOptionDto);
+        User user = userRepository.findById(userId).orElseThrow(()-> new BaseException(ROOM_CREATE_FAILED));
+        RoomRequestDto roomRequestDto = new RoomRequestDto(roomBasicDto, roomOptionDto, roomAddOptionDto, user);
         try {
             Room room = roomRepository.save(roomRequestDto.toEntity(roomRequestDto));
             if(!(multipartFileList == null )) {
@@ -60,15 +69,21 @@ public class RoomServiceImpl implements RoomService {
             }
         }catch (Exception e){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return new BaseResponse(BaseResponseStatus.ROOM_CREATE_FAILED);
+            return new BaseResponse(ROOM_CREATE_FAILED);
         }
     }
 
     @Override
     public BaseResponse getRoom(Long roomId) {
         Room room = roomRepository.findById(roomId).get();
-        RoomResponseDto roomResponseDto = new RoomResponseDto(room);
-        return new BaseResponse(BaseResponseStatus.SUCCESS,roomResponseDto);
+        List<RoomImg> roomImgList = roomImgRepository.findByRoom_Id(roomId);
+        List<RoomImgResponseDto> roomImgResponseDtoList = new ArrayList<>();
+        for(RoomImg roomImg:roomImgList){
+            roomImgResponseDtoList.add(new RoomImgResponseDto(roomImg));
+        }
+        RoomDetailResponseDto roomDetailResponseDto = new RoomDetailResponseDto(room,roomImgResponseDtoList);
+//        RoomResponseDto roomResponseDto = new RoomResponseDto(room);
+        return new BaseResponse(BaseResponseStatus.SUCCESS,roomDetailResponseDto);
     }
 
     @Override
