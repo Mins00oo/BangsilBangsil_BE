@@ -28,7 +28,7 @@ public enum BaseResponseStatus {
     // User
     BAD_EMAIL_REQUEST(false, 2100, "이메일 입력 값이 잘못되었습니다."),
     BAD_PASSWORD_REQUEST(false, 2101, "비밀번호 입력 값이 잘못되었습니다."),
-
+    LOGIN_REQUEST_FAILED(false, 2200, "로그인에 실패했습니다."),
 
 
     /**
