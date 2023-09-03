@@ -3,6 +3,8 @@ package com.bangsil.bangsil.user.application;
 import com.bangsil.bangsil.common.BaseResponseStatus;
 import com.bangsil.bangsil.common.config.Role;
 import com.bangsil.bangsil.common.exception.BaseException;
+import com.bangsil.bangsil.common.exception.NotValidInformationException;
+import com.bangsil.bangsil.common.exception.UserNotFoundException;
 import com.bangsil.bangsil.user.domain.UnAuthorizedUser;
 import com.bangsil.bangsil.user.domain.User;
 import com.bangsil.bangsil.user.dto.ModifyPwDto;
@@ -76,20 +78,22 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public boolean checkDuplicateEmail(String email) throws BaseException {
-        try {
+    public boolean checkDuplicateEmail(String email) throws UserNotFoundException {
+        boolean b = userRepository.existsByEmail(email);
+        if (!b) {
+            throw new UserNotFoundException("등록된 이메일이 존재하지 않습니다");
+        } else {
             return userRepository.existsByEmail(email);
-        } catch (Exception e) {
-            throw new BaseException(BaseResponseStatus.BAD_EMAIL_REQUEST);
         }
+
     }
 
     @Transactional
     @Override
-    public void modifyUserPw(ModifyPwDto modifyPwDto, Long userId) throws BaseException {
+    public void modifyUserPw(ModifyPwDto modifyPwDto, Long userId) throws NotValidInformationException {
         User user = userProvider.retrieveUser(userId);
         if (!bCryptPasswordEncoder.matches(modifyPwDto.getOldPwd(), user.getPwd())) {
-            throw new BaseException(BaseResponseStatus.INCORRECT_USER_PASSWORD);
+            throw new NotValidInformationException("입력하신 비밀번호가 일치하지 않습니다.");
         }
         user.changePw(modifyPwDto.getNewPwd());
     }

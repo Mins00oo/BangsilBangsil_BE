@@ -2,6 +2,7 @@ package com.bangsil.bangsil.user.application;
 
 import com.bangsil.bangsil.common.BaseResponseStatus;
 import com.bangsil.bangsil.common.exception.BaseException;
+import com.bangsil.bangsil.common.exception.UserNotFoundException;
 import com.bangsil.bangsil.user.domain.User;
 import com.bangsil.bangsil.user.infrastructure.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class UserProviderImpl implements UserProvider {
     private final UserRepository userRepository;
 
     @Override
-    public User retrieveUser(Long userId) throws BaseException {
+    public User retrieveUser(Long userId) throws UserNotFoundException {
         return userRepository.findById(userId).orElseThrow(
-                () -> new BaseException(BaseResponseStatus.USER_RETRIEVE_FAILED));
+                () -> new UserNotFoundException("유저를 조회할 수 없습니다."));
     }
 }

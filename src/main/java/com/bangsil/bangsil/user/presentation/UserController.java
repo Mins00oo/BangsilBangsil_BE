@@ -3,12 +3,16 @@ package com.bangsil.bangsil.user.presentation;
 import com.bangsil.bangsil.common.BaseResponse;
 import com.bangsil.bangsil.common.BaseResponseStatus;
 import com.bangsil.bangsil.common.exception.BaseException;
+import com.bangsil.bangsil.common.exception.NotValidInformationException;
+import com.bangsil.bangsil.common.exception.UserNotFoundException;
 import com.bangsil.bangsil.user.application.UserService;
 import com.bangsil.bangsil.user.dto.EmailCheckDto;
 import com.bangsil.bangsil.user.dto.ModifyPwDto;
 import com.bangsil.bangsil.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -35,17 +39,18 @@ public class UserController {
      * {@code return} 생성되었다는 메시지
      */
     @PostMapping("/signup")
-    public BaseResponse<Object> createUser(@Valid @RequestPart UserDto userDto,
-                                           @RequestPart(value = "profileImg") MultipartFile multipartFile) {
+    public ResponseEntity<Object> createUser(@Valid @RequestPart UserDto userDto,
+                                             @RequestPart(value = "profileImg") MultipartFile multipartFile) {
         try {
             if (multipartFile != null && !multipartFile.isEmpty()) {
                 userService.createUser(userDto, multipartFile);
             } else {
                 userService.createUser(userDto, null);
             }
-            return new BaseResponse<>("회원가입이 완료되었습니다.");
+            String result = "회원가입이 완료되었습니다.";
+            return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(result));
         } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
+            throw new UserNotFoundException("정보가 일치하지 않습니다.");
         }
     }
 
@@ -57,12 +62,13 @@ public class UserController {
      * {@code return} 생성되었다는 메시지
      */
     @PostMapping("/check/email")
-    public BaseResponse<Object> checkDuplicateEmail(@RequestBody EmailCheckDto emailCheckDto) {
+    public ResponseEntity<Object> checkDuplicateEmail(@RequestBody EmailCheckDto emailCheckDto) {
         try {
-            boolean isChecked = userService.checkDuplicateEmail(emailCheckDto.getEmail());
-            return new BaseResponse<>(isChecked);
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
+            userService.checkDuplicateEmail(emailCheckDto.getEmail());
+            String result = "사용 가능한 이메일입니다.";
+            return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(result));
+        } catch (UserNotFoundException e) {
+            throw e;
         }
     }
 
@@ -74,18 +80,19 @@ public class UserController {
      * {@code return} 생성되었다는 메시지
      */
     @PutMapping("/user/pw")
-    public BaseResponse<Object> modifyUserPw(@RequestBody ModifyPwDto modifyPwDto, HttpServletRequest request) {
+    public ResponseEntity<Object> modifyUserPw(@RequestBody ModifyPwDto modifyPwDto, HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
 
         if (Objects.equals(modifyPwDto.getOldPwd(), modifyPwDto.getNewPwd())) {
-            return new BaseResponse<>(BaseResponseStatus.BAD_PASSWORD_REQUEST);
+            throw new NotValidInformationException("변경하려는 비밀번호가 동일합니다.");
         }
 
         try {
             userService.modifyUserPw(modifyPwDto, userId);
-            return new BaseResponse<>("비밀번호 변경에 성공하였습니다.");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
+            String result = "비밀번호가 수정되었습니다.";
+            return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(result));
+        } catch (NotValidInformationException e) {
+            throw e;
         }
     }
 
