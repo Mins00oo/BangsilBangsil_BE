@@ -9,7 +9,7 @@ import com.bangsil.bangsil.user.dto.UserSignUpDto;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
-    void createUser(UserSignUpDto userDto, MultipartFile multipartFile) throws BaseException;
+    void createUser(UserSignUpDto userDto, MultipartFile multipartFile);
 
     boolean checkDuplicateEmail(String email) throws UserNotFoundException;
 

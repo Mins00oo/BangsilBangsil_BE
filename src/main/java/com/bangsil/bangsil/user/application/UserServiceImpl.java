@@ -6,7 +6,6 @@ import com.bangsil.bangsil.common.exception.*;
 import com.bangsil.bangsil.user.domain.UnAuthorizedUser;
 import com.bangsil.bangsil.user.domain.User;
 import com.bangsil.bangsil.user.dto.ModifyPwDto;
-import com.bangsil.bangsil.user.dto.UserDto;
 import com.bangsil.bangsil.user.dto.UserSignUpDto;
 import com.bangsil.bangsil.user.infrastructure.UnAuthorizedUserRepository;
 import com.bangsil.bangsil.user.infrastructure.UserRepository;
@@ -33,41 +32,48 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void createUser(UserSignUpDto userDto, MultipartFile multipartFile) throws BaseException {
+    public void createUser(UserSignUpDto userSignUpDto, MultipartFile multipartFile) {
         S3UploadDto s3UploadDto;
         String code = emailService.createCode();
 
-        if (userRepository.existsByEmail(userDto.getEmail())) {
+        if (userRepository.existsByEmail(userSignUpDto.getEmail())) {
             throw new AlreadyExistUserException("이미 사용중인 이메일입니다.");
         }
 
         if (multipartFile != null) {
             try {
                 s3UploadDto = s3UploaderService.upload(multipartFile, "bangsilbangsil", "userProfile");
-                UnAuthorizedUser unAuthorizedUser = userDto.toEntity(s3UploadDto, code);
-                unAuthorizedUserRepository.save(unAuthorizedUser);
+                createUnAuthorizedUser(userSignUpDto, s3UploadDto, code);
             } catch (Exception e) {
                 throw new S3UploadFailException("사진 등록에 실패하였습니다.");
             }
-
-            try {
-                emailService.send(userDto.getEmail(), code);
-            } catch (Exception e) {
-                throw new BaseException(BaseResponseStatus.BAD_EMAIL_REQUEST);
-            }
+            sendEmailCode(userSignUpDto.getEmail(), code);
 
         } else {
-            UnAuthorizedUser unAuthorizedUser = userDto.toEntity(null, code);
-            if (unAuthorizedUserRepository.existsByEmail(userDto.getEmail())) {
-                UnAuthorizedUser user = unAuthorizedUserRepository.findByEmail(userDto.getEmail());
-                user.changeCode(code);
-            } else
-                unAuthorizedUserRepository.save(unAuthorizedUser);
-            try {
-                emailService.send(userDto.getEmail(), code);
-            } catch (Exception e) {
-                throw new BaseException(BaseResponseStatus.BAD_REQUEST);
+            createUnAuthorizedUser(userSignUpDto, null, code);
+            sendEmailCode(userSignUpDto.getEmail(), code);
+        }
+    }
+
+    private void createUnAuthorizedUser(UserSignUpDto userSignUpDto, S3UploadDto s3UploadDto, String code) {
+        UnAuthorizedUser unAuthorizedUser;
+        try {
+            if (unAuthorizedUserRepository.existsByEmail(userSignUpDto.getEmail())) {
+                unAuthorizedUser = unAuthorizedUserRepository.findByEmail(userSignUpDto.getEmail());
+            } else {
+                unAuthorizedUser = userSignUpDto.toEntity(s3UploadDto, code);
             }
+            unAuthorizedUserRepository.save(unAuthorizedUser);
+        } catch (Exception e) {
+            throw new UserDBException("회원가입에 실패했습니다.");
+        }
+    }
+
+    private void sendEmailCode(String email, String code) {
+        try {
+            emailService.send(email, code);
+        } catch (Exception e) {
+            throw new EmailServiceException("인증번호 전송에 실패하였습니다.");
         }
     }
 

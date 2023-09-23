@@ -3,6 +3,7 @@ package com.bangsil.bangsil.user.dto;
 import com.bangsil.bangsil.common.config.Role;
 import com.bangsil.bangsil.user.domain.UnAuthorizedUser;
 import com.bangsil.bangsil.utils.s3.dto.S3UploadDto;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserSignUpDto {
     private String email;
 
@@ -24,6 +26,7 @@ public class UserSignUpDto {
                 .emailAuth(false)
                 .pwd(password)
                 .s3UploadDto(s3UploadDto)
+                .role(Role.USER)
                 .build();
     }
 

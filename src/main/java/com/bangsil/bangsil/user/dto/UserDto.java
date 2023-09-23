@@ -1,6 +1,5 @@
 package com.bangsil.bangsil.user.dto;
 
-import com.bangsil.bangsil.common.config.Role;
 import com.bangsil.bangsil.user.domain.UnAuthorizedUser;
 import com.bangsil.bangsil.utils.s3.dto.S3UploadDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
