@@ -9,6 +9,7 @@ import com.bangsil.bangsil.user.application.UserService;
 import com.bangsil.bangsil.user.dto.EmailCheckDto;
 import com.bangsil.bangsil.user.dto.ModifyPwDto;
 import com.bangsil.bangsil.user.dto.UserDto;
+import com.bangsil.bangsil.user.dto.UserSignUpDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public class UserController {
      * {@code return} 생성되었다는 메시지
      */
     @PostMapping("/signup")
-    public ResponseEntity<Object> createUser(@Valid @RequestPart UserDto userDto,
+    public ResponseEntity<Object> createUser(@Valid @RequestPart UserSignUpDto userDto,
                                              @RequestPart(value = "profileImg") MultipartFile multipartFile) {
         try {
             if (multipartFile != null && !multipartFile.isEmpty()) {

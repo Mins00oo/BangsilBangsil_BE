@@ -2,13 +2,12 @@ package com.bangsil.bangsil.user.application;
 
 import com.bangsil.bangsil.common.BaseResponseStatus;
 import com.bangsil.bangsil.common.config.Role;
-import com.bangsil.bangsil.common.exception.BaseException;
-import com.bangsil.bangsil.common.exception.NotValidInformationException;
-import com.bangsil.bangsil.common.exception.UserNotFoundException;
+import com.bangsil.bangsil.common.exception.*;
 import com.bangsil.bangsil.user.domain.UnAuthorizedUser;
 import com.bangsil.bangsil.user.domain.User;
 import com.bangsil.bangsil.user.dto.ModifyPwDto;
 import com.bangsil.bangsil.user.dto.UserDto;
+import com.bangsil.bangsil.user.dto.UserSignUpDto;
 import com.bangsil.bangsil.user.infrastructure.UnAuthorizedUserRepository;
 import com.bangsil.bangsil.user.infrastructure.UserRepository;
 import com.bangsil.bangsil.utils.email.application.EmailServiceImpl;
@@ -34,25 +33,21 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void createUser(UserDto userDto, MultipartFile multipartFile) throws BaseException {
+    public void createUser(UserSignUpDto userDto, MultipartFile multipartFile) throws BaseException {
         S3UploadDto s3UploadDto;
         String code = emailService.createCode();
 
         if (userRepository.existsByEmail(userDto.getEmail())) {
-            throw new BaseException(BaseResponseStatus.ALREADY_EXIST_USER);
+            throw new AlreadyExistUserException("이미 사용중인 이메일입니다.");
         }
 
         if (multipartFile != null) {
             try {
                 s3UploadDto = s3UploaderService.upload(multipartFile, "bangsilbangsil", "userProfile");
                 UnAuthorizedUser unAuthorizedUser = userDto.toEntity(s3UploadDto, code);
-                if (unAuthorizedUserRepository.existsByEmail(userDto.getEmail())) {
-                    UnAuthorizedUser user = unAuthorizedUserRepository.findByEmail(userDto.getEmail());
-                    user.changeCode(code);
-                } else
-                    unAuthorizedUserRepository.save(unAuthorizedUser);
+                unAuthorizedUserRepository.save(unAuthorizedUser);
             } catch (Exception e) {
-                throw new BaseException(BaseResponseStatus.USER_CREATE_FAILED);
+                throw new S3UploadFailException("사진 등록에 실패하였습니다.");
             }
 
             try {

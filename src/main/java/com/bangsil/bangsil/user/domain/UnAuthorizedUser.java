@@ -41,8 +41,7 @@ public class UnAuthorizedUser {
     private Role role;
 
     @Builder
-    public UnAuthorizedUser(String email, String emailKey, Boolean emailAuth, String pwd, S3UploadDto s3UploadDto,
-                            Role role) {
+    public UnAuthorizedUser(String email, String emailKey, Boolean emailAuth, String pwd, S3UploadDto s3UploadDto) {
         this.email = email;
         this.emailKey = emailKey;
         this.emailAuth = emailAuth;
@@ -52,7 +51,7 @@ public class UnAuthorizedUser {
             this.saveName = s3UploadDto.getSaveName();
             this.originName = s3UploadDto.getOriginName();
         }
-        this.role = role;
+        this.role = Role.USER;
     }
 
     public void changeCode(String code) {
