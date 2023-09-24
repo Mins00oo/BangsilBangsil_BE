@@ -41,8 +41,7 @@ public class UnAuthorizedUser {
     private Role role;
 
     @Builder
-    public UnAuthorizedUser(String email, String emailKey, Boolean emailAuth, String pwd, S3UploadDto s3UploadDto,
-                            Role role) {
+    public UnAuthorizedUser(String email, String emailKey, Boolean emailAuth, String pwd, S3UploadDto s3UploadDto, Role role) {
         this.email = email;
         this.emailKey = emailKey;
         this.emailAuth = emailAuth;
